@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Gacha | Sky Emperor</title>
+  <link rel="stylesheet" href="assets/css/gacha.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <div class="logo">
+      <img src="assets/photo/Logo_sky.png" alt="Sky Emperor" />
+      <span>EMPEROR</span>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="gacha.html" class="active">Gacha</a>
+      <a href="#">Database</a>
+    </nav>
+  </header>
+
+  <!-- Konten Utama -->
+  <main>
+    <div class="member-info">
+        <p>Member : <strong id="display-name">-</strong></p>
+        <p>Kelas : <strong id="display-class">-</strong></p>
+    </div>
+
+
+    <h1 class="title">Event Gacha</h1>
+    <p class="subtitle">Beli Billing Gratis Billing</p>
+
+    <!-- Gacha Slot -->
+    <hr>
+    <div class="gacha-container">
+      <div class="slot">1 Jam</div>
+      <div class="slot">2 Jam</div>
+      <div class="slot">3 Jam</div>
+      <div class="slot">5 Jam</div>
+      <div class="slot">10 Jam</div>
+      <div class="slot">24 Jam</div>
+      <div class="slot">50 Jam</div>
+    </div>
+    <hr>
+
+    <button class="start-btn" id="gacha-btn">Start</button>
+
+    <!-- Bagian bawah -->
+    <div class="bottom-section">
+      <!-- Rules -->
+      <div class="rules box">
+        <h3>RULES</h3>
+        <ol>
+          <li>Beli billing 5 Jam → 1 Gacha</li>
+          <li>Beli billing 10 Jam ke atas → 2 Gacha</li>
+          <li>Khusus pembelian billing member (Reg / Vip / VVIP)</li>
+          <li>Tidak berlaku untuk billing paket (Non Member / PP / PM)</li>
+        </ol>
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="leaderboard box">
+        <h3>Log</h3>
+        <div id="leaderboard-list">
+            <p>Loading...</p>
+        </div>
+      </div>
+
+      <!-- Prize -->
+      <div class="prize box">
+        <h3>Prize</h3>
+        <p>1 Jam</p>
+        <p>2 Jam</p>
+        <p>3 Jam</p>
+        <p>5 Jam</p>
+        <p>10 Jam</p>
+        <p>24 Jam</p>
+        <p>50 Jam</p>
+      </div>
+
+      <!-- Member -->
+      <div class="member box">
+        <h3>Member</h3>
+        <input id="member-name" type="text" placeholder="Nama Member" />
+        <input id="member-class" type="text" placeholder="Kelas Member" />
+        <button class="submit" id="submit-member">Submit</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="assets/js/gacha.js"></script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(to bottom, #243e81, #456b9a);
+  background-attachment: fixed;
+  color: white;
+}
+
+/* Navbar */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 80px;
+  background-color: #182957;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  height: 40px;
+}
+
+nav a {
+  margin-left: 40px;
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+  font-size: 18px;
+  position: relative;
+}
+
+nav a.active::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: -6px;
+  left: 0;
+  background: white;
+}
+
+/* Konten */
+main {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.member-info {
+  font-size: 16px;
+  text-align: left;
+  margin-left: 80px;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: 800;
+  margin-top: 10px;
+}
+
+.subtitle {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 40px;
+  color: #e0e0e0;
+}
+
+/* Gacha Slots */
+.gacha-container {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.slot {
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* Button Start */
+.start-btn {
+  background: white;
+  color: #1e3a8a;
+  border: none;
+  padding: 10px 40px;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px #263d6b;
+  transition: all 0.2s ease;
+  
+}
+
+.start-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Bagian bawah */
+.bottom-section {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-top: 40px;
+  padding: 0 60px;
+  gap: 30px;
+}
+
+.box {
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  padding: 20px 40px;
+  text-align: left;
+  flex: 1;
+  min-width: 250px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.box h3 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.rules ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  margin: 8px 0;
+  gap: 40px;
+}
+
+.member input {
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.member .submit {
+  background: white;
+  color: #1e3a8a;
+  font-weight: 600;
+  padding: 6px 20px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+}
+
+.leaderboard-box {
+  border: 2px solid white;
+  border-radius: 12px;
+  padding: 20px;
+  width: 250px;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.leaderboard-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: white;
+}
+
+#leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.leaderboard-item span {
+  font-size: 18px;
+  font-weight: 600;
+}
