@@ -198,25 +198,34 @@ main {
   transform: scale(1.05);
 }
 
-.leaderboard-item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  font-weight: 500;
-  color: white;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
-  padding-bottom: 5px;
-}
-
 #leaderboard-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  /* LOGIC SCROLLABLE */
+  max-height: 100px; /* Batas maksimal tinggi log (bisa diatur sesuka hati) */
+  overflow-y: auto;  /* Munculkan scrollbar jika konten melebihi max-height */
+  padding-right: 10px; /* Memberi jarak agar teks tidak tertutup scrollbar */
 }
 
-.leaderboard-item span {
-  font-size: 16px;
-  font-weight: 600;
+/* Kustomisasi Scrollbar (Biar makin keren & minimalis) */
+#leaderboard-list::-webkit-scrollbar {
+  width: 8px; /* Lebar scrollbar */
+}
+
+#leaderboard-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1); /* Warna jalur scrollbar */
+  border-radius: 10px;
+}
+
+#leaderboard-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4); /* Warna batang scrollbar */
+  border-radius: 10px;
+}
+
+#leaderboard-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.8); /* Warna saat dihover */
 }
 
 .slot {
