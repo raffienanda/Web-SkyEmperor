@@ -11,8 +11,17 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 80px;
-  background-color: #182957;
+  padding: 15px 80px;
+  
+  background: rgba(24, 41, 87, 0.3);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .logo {
@@ -28,10 +37,20 @@ header {
 nav a {
   margin-left: 40px;
   text-decoration: none;
-  color: white;
+  color: rgba(255, 255, 255, 0.8);
   font-weight: 600;
   font-size: 18px;
   position: relative;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: white;
+  text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+nav a.active {
+  color: white;
 }
 
 nav a.active::after {
@@ -42,6 +61,7 @@ nav a.active::after {
   bottom: -6px;
   left: 0;
   background: white;
+  box-shadow: 0 0 10px white;
 }
 
 /* Konten */
@@ -60,6 +80,7 @@ main {
   font-size: 48px;
   font-weight: 800;
   margin-top: 10px;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 .subtitle {
@@ -83,13 +104,15 @@ main {
   width: 120px;
   height: 120px;
   background: rgba(255, 255, 255, 0.1);
-  border: 3px solid rgba(255, 255, 255, 0.8);
+  border: 3px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(5px); /* Tambahan efek kaca */
   border-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 28px;
   font-weight: 700;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 /* Button Start */
@@ -104,11 +127,18 @@ main {
   cursor: pointer;
   box-shadow: 0 4px #263d6b;
   transition: all 0.2s ease;
-  
 }
 
 .start-btn:hover {
   transform: scale(1.05);
+  box-shadow: 0 6px #263d6b;
+}
+
+.start-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* Bagian bawah */
@@ -122,13 +152,14 @@ main {
 }
 
 .box {
-  border: 3px solid rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 20px;
   padding: 20px 40px;
   text-align: left;
   flex: 1;
   min-width: 250px;
   background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px); /* Efek kaca */
 }
 
 .box h3 {
@@ -141,40 +172,30 @@ main {
   padding-left: 20px;
 }
 
-.row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 18px;
-  margin: 8px 0;
-  gap: 40px;
-}
-
 .member input {
   width: 100%;
-  padding: 8px 10px;
+  padding: 10px;
   border: none;
   border-radius: 10px;
   margin-bottom: 10px;
+  box-sizing: border-box; /* Agar padding ga bikin lebar */
 }
 
 .member .submit {
   background: white;
   color: #1e3a8a;
   font-weight: 600;
-  padding: 6px 20px;
+  padding: 8px 25px;
   border-radius: 20px;
   border: none;
   cursor: pointer;
   display: block;
-  margin: 0 auto;
+  margin: 10px auto 0;
+  transition: transform 0.2s;
 }
 
-.leaderboard-box {
-  border: 2px solid white;
-  border-radius: 12px;
-  padding: 20px;
-  width: 250px;
-  background-color: rgba(255, 255, 255, 0.05);
+.member .submit:hover {
+  transform: scale(1.05);
 }
 
 .leaderboard-item {
@@ -183,6 +204,8 @@ main {
   margin-bottom: 10px;
   font-weight: 500;
   color: white;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 5px;
 }
 
 #leaderboard-list {
@@ -192,6 +215,19 @@ main {
 }
 
 .leaderboard-item span {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
+}
+
+.slot {
+  transition: all 0.1s ease-in-out;
+}
+
+.slot.active {
+  background: white;
+  color: #1e3a8a; 
+  transform: scale(1.15); 
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.5);
+  border-color: #ffffff;
+  z-index: 10;
 }

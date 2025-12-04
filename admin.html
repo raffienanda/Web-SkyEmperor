@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | Sky Emperor</title>
+  <link rel="stylesheet" href="assets/css/admin.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="assets/photo/Logo_sky.png" alt="Sky Emperor" />
+      <span>ADMIN PANEL</span>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="gacha.html">Gacha</a>
+      <a href="admin.html" class="active">Database</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1 class="title">Manajemen Data</h1>
+    
+    <div class="form-container box">
+      <h3 id="form-title">Tambah Data Baru</h3>
+      <input type="hidden" id="old-name" /> <div class="input-group">
+        <input type="text" id="admin-nama" placeholder="Nama Member" />
+        <input type="text" id="admin-kelas" placeholder="Kelas" />
+        <input type="text" id="admin-prize" placeholder="Hadiah (Opsional)" />
+      </div>
+      <div class="btn-group">
+        <button id="btn-save" class="action-btn save">Simpan</button>
+        <button id="btn-cancel" class="action-btn cancel" style="display:none;">Batal</button>
+      </div>
+    </div>
+
+    <div class="table-container box">
+      <div class="table-header">
+        <span>Nama</span>
+        <span>Kelas</span>
+        <span>Hadiah</span>
+        <span>Aksi</span>
+      </div>
+      <div id="data-list">
+        <p style="text-align:center; padding: 20px;">Loading data...</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

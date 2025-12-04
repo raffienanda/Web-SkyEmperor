@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(to bottom, #243e81, #456b9a);
+  background-attachment: fixed;
+  color: white;
+}
+
+/* Navbar (Copy dari style.css yang baru) */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 80px;
+  background: rgba(24, 41, 87, 0.3);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo img { height: 40px; }
+
+nav a {
+  margin-left: 40px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+nav a:hover, nav a.active { color: white; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+
+/* Content */
+main {
+  padding: 40px 80px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.title {
+  text-align: center;
+  font-weight: 800;
+  font-size: 36px;
+  margin-bottom: 30px;
+}
+
+.box {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+/* Form Styles */
+.form-container h3 { margin-top: 0; text-align: center; }
+
+.input-group {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.btn-group { display: flex; gap: 10px; justify-content: center; }
+
+.action-btn {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.action-btn:hover { transform: scale(1.05); }
+.save { background: #4caf50; color: white; }
+.cancel { background: #f44336; color: white; }
+
+/* Table Styles */
+.table-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  font-weight: 800;
+  padding: 10px 0;
+  border-bottom: 2px solid white;
+  text-align: left;
+}
+
+.data-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  align-items: center;
+}
+
+.data-row:hover { background: rgba(255,255,255,0.1); }
+
+.btn-edit {
+  background: #ffc107;
+  color: black;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-right: 5px;
+}
+.btn-delete {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+}

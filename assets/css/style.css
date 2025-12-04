@@ -13,8 +13,17 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 80px;
-  background-color: #182957;
+  padding: 15px 80px; 
+  
+  background: rgba(24, 41, 87, 0.3);
+  backdrop-filter: blur(10px); 
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+  
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .logo {
@@ -29,14 +38,50 @@ header {
 }
 
 /* NAVIGATION */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 80px;
+  
+  background: rgba(24, 41, 87, 0.3);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  height: 40px;
+}
+
 nav a {
   margin-left: 40px;
   text-decoration: none;
-  color: white;
+  color: rgba(255, 255, 255, 0.8);
   font-weight: 600;
   font-size: 18px;
   position: relative;
-  background: #243e81;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: white;
+  text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+nav a.active {
+  color: white;
 }
 
 nav a.active::after {
@@ -47,6 +92,7 @@ nav a.active::after {
   bottom: -6px;
   left: 0;
   background: white;
+  box-shadow: 0 0 10px white;
 }
 
 /* MAIN SECTION */
@@ -54,8 +100,8 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 100px 100px;
-  margin-top: 70px;
+  padding: 180px 100px; /* Adjusted padding */
+  margin-top: 0; /* Reset margin top karena navbar sticky */
 }
 
 .welcome h1 {
@@ -87,16 +133,20 @@ main {
   box-shadow: 4px 4px rgba(0, 0, 0, 0.25);
   cursor: pointer;
   transition: all 0.2s ease;
+  text-decoration: none; /* Penting untuk tag <a> */
+  display: inline-block;
 }
 
 .gacha-btn:hover {
   transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
 }
 
 /* LEADERBOARD */
 .leaderboard {
-  background: transparent;
-  border: 2px solid white;
+  background: rgba(255, 255, 255, 0.05); /* Sedikit transparan */
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
   border-radius: 20px;
   padding: 30px 100px;
   padding-bottom: 250px;
@@ -104,8 +154,6 @@ main {
   padding-right: 40px;
   text-align: left;
 }
-
-
 
 .leaderboard h2 {
   font-size: 22px;
@@ -121,10 +169,12 @@ main {
   gap: 15px;
 }
 
-.row {
+.leaderboard-item {
   display: flex;
   justify-content: space-between;
   font-size: 20px;
   font-weight: 600;
-  gap: 100px;
+  gap: 50px;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  padding-bottom: 5px;
 }
