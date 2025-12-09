@@ -20,9 +20,14 @@
   </header>
 
   <main>
-    <div class="member-info">
-        <p>Member : <strong id="display-name">-</strong></p>
-        <p>Kelas : <strong id="display-class">-</strong></p>
+    <div class="member-info" style="display: flex; justify-content: space-between; align-items: center; padding-right: 80px;">
+        <div>
+            <p>Member : <strong id="display-name">-</strong></p>
+            <p>Kelas : <strong id="display-class">-</strong></p>
+        </div>
+        <button onclick="logout()" style="background: #ff4d4d; color: white; border: none; padding: 5px 15px; border-radius: 10px; cursor: pointer;">
+            Logout
+        </button>
     </div>
 
     <h1 class="title">Event Gacha</h1>
@@ -71,12 +76,7 @@
         <p>50 Jam</p>
       </div>
 
-      <div class="member box">
-        <h3>Member</h3>
-        <input id="member-name" type="text" placeholder="Nama Member" />
-        <input id="member-class" type="text" placeholder="Kelas Member" />
-        <button class="submit" id="submit-member">Submit</button>
-      </div>
+      
     </div>
   </main>
 
