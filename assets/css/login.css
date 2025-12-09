@@ -1,0 +1,88 @@
+main.login-page {
+  display: flex !important; /* Paksa ubah display dari style.css */
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 0 !important;
+  min-height: calc(100vh - 80px); /* Tinggi layar dikurangi tinggi header */
+}
+
+/* Kotak Login (Container) */
+.login-box {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px); /* Efek blur kaca */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 40px 50px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 400px; /* Batas lebar kotak agar rapi */
+}
+
+/* Tipografi di dalam kotak */
+.login-box h1 {
+  font-size: 36px;
+  margin: 0;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.login-box p {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 5px 0 20px 0;
+}
+
+/* Input Styles */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.login-input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  box-sizing: border-box; /* Pastikan padding tidak melebarkan input */
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+
+.login-input:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+}
+
+/* Button Styles */
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 18px;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  background: white;
+  color: #243e81; /* Sesuai tema biru */
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 10px;
+}
+
+.login-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.login-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}

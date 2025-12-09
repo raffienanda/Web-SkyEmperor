@@ -204,7 +204,7 @@ main {
   gap: 10px;
 
   /* LOGIC SCROLLABLE */
-  max-height: 100px; /* Batas maksimal tinggi log (bisa diatur sesuka hati) */
+  max-height: 200px; /* Batas maksimal tinggi log (bisa diatur sesuka hati) */
   overflow-y: auto;  /* Munculkan scrollbar jika konten melebihi max-height */
   padding-right: 10px; /* Memberi jarak agar teks tidak tertutup scrollbar */
 }
