@@ -357,3 +357,22 @@ main {
   color: #d9534f;
   text-shadow: none; /* Hilangkan efek glow navbar */
 }
+
+/* Pastikan slot punya transisi halus */
+.slot {
+  transition: all 0.1s ease-in-out;
+  /* Pastikan posisi relative agar z-index jalan saat membesar */
+  position: relative; 
+}
+
+/* Ini Style saat slot "Nyala" (Active) */
+.slot.active {
+  background: white;
+  color: #1e3a8a; /* Biru */
+  transform: scale(1.15); /* Membesar sedikit */
+  box-shadow: 
+    0 0 25px rgba(255, 255, 255, 0.8), 
+    inset 0 0 10px rgba(255, 255, 255, 0.5); /* Efek Glowing */
+  border-color: #ffffff;
+  z-index: 10; /* Muncul paling depan */
+}
