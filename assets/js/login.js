@@ -18,6 +18,7 @@ const scriptURL = "https://script.google.com/macros/s/AKfycbwxLApx-ZVsVHi_w0SjTi
                 window.location.href = "admin.html"; // Arahkan ke dashboard admin
                 return;
             }
+            
 
             // === LOGIC MEMBER BIASA ===
             btn.textContent = "Checking...";

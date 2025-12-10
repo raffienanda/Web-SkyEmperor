@@ -179,7 +179,110 @@ tr:last-child td { border-bottom: none; }
   font-weight: 600;
 }
 
+/* === STYLE SEARCH BAR MEMBER === */
+.search-input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.9); /* Latar putih terang */
+  color: #333;
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box; /* Agar padding tidak melebarkan elemen */
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #00c6fb; /* Warna biru saat diklik */
+  box-shadow: 0 0 15px rgba(0, 198, 251, 0.3);
+  transform: scale(1.01);
+}
+
+.search-input::placeholder {
+  color: #888;
+  font-style: italic;
+}
+
 .btn-delete:hover { background: #e84118; }
+
+/* === STYLE TOMBOL EDIT === */
+.btn-edit {
+  background: #f39c12; /* Warna Oranye */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  margin-right: 5px; /* Jarak dengan tombol hapus */
+}
+.btn-edit:hover { background: #d68910; }
+
+/* === STYLE MODAL (POPUP) === */
+.modal {
+  display: none; /* Sembunyi by default */
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Latar gelap transparan */
+  backdrop-filter: blur(4px); /* Efek blur belakang */
+}
+
+.modal-content {
+  background-color: white;
+  margin: 10% auto; /* Posisi di tengah agak atas */
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  position: relative;
+  text-align: left;
+  color: #333;
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.close-btn:hover { color: #000; }
+
+.modal-input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0 20px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+.btn-save {
+  width: 100%;
+  background-color: #243e81;
+  color: white;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+}
+.btn-save:hover { background-color: #1a2e63; }
 
 /* RESPONSIVE: Balik ke atas kalau di HP */
 @media (max-width: 768px) {

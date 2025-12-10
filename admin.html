@@ -42,6 +42,11 @@
                     </div>
                 </div>
 
+                <div style="margin-bottom: 15px;">
+                    <input type="text" id="search-member" class="search-input"
+                        placeholder="🔍 Cari Nama Member atau Kelas...">
+                </div>
+
                 <div class="table-responsive">
                     <table id="table-members">
                         <thead>
@@ -121,6 +126,23 @@
 
         </div>
     </main>
+
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeEditModal()">&times;</span>
+            <h3>Edit Data Member</h3>
+
+            <input type="hidden" id="edit-old-name">
+
+            <label style="font-size: 14px; font-weight: bold; color: #333;">Nama Member</label>
+            <input type="text" id="edit-name" class="modal-input" placeholder="Nama Baru">
+
+            <label style="font-size: 14px; font-weight: bold; color: #333;">Kelas</label>
+            <input type="text" id="edit-class" class="modal-input" placeholder="Kelas Baru (REG/VIP)">
+
+            <button onclick="saveEditMember()" class="btn-save">Simpan Perubahan</button>
+        </div>
+    </div>
 
     <script src="assets/js/admin.js"></script>
 </body>
