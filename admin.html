@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Sky Emperor</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="assets/photo/Logo_sky.png" alt="Sky Emperor">
+            <span style="font-weight: 800; font-size: 20px; margin-left: 10px; color: #ffd700;">ADMIN PANEL</span>
+        </div>
+        <nav>
+            <a href="#" onclick="logoutAdmin()" style="color: #ff6b6b; font-weight:bold;">Logout</a>
+        </nav>
+    </header>
+
+    <main class="admin-container">
+
+        <div class="admin-tabs">
+            <button class="tab-btn active" onclick="switchTab('members')">👥 Members</button>
+            <button class="tab-btn" onclick="switchTab('prizes')">🎁 Prize Pool</button>
+            <button class="tab-btn" onclick="switchTab('logs')">🏆 Winners Log</button>
+        </div>
+
+        <div class="admin-content-area">
+
+            <div id="tab-members" class="tab-content active">
+                <div class="card-action">
+                    <h3>Tambah Member Baru</h3>
+                    <div class="input-row">
+                        <input type="text" id="new-member-name" placeholder="Nama (ex: nanda)">
+                        <input type="text" id="new-member-class" placeholder="Kelas (ex: VIP)">
+                        <button onclick="addMember()">+ Tambah</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="table-members">
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Kelas</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3">Memuat data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab-prizes" class="tab-content">
+                <div class="card-action">
+                    <h3>Update Stok Hadiah</h3>
+                    <p style="font-size: 14px; opacity: 0.8;">Nama item harus persis sama jika ingin update.</p>
+                    <div class="input-row">
+                        <input type="text" id="prize-item" list="list-prize" placeholder="Item (ex: 1 Jam)">
+                        <input type="number" id="prize-stock" placeholder="Stok Baru">
+                        <button onclick="updateStock()">Simpan</button>
+
+                        <datalist id="list-prize">
+                            <option value="1 Jam">
+                            <option value="2 Jam">
+                            <option value="3 Jam">
+                            <option value="5 Jam">
+                            <option value="10 Jam">
+                            <option value="24 Jam">
+                            <option value="50 Jam">
+                        </datalist>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="table-prizes">
+                        <thead>
+                            <tr>
+                                <th>Prize Item</th>
+                                <th>Sisa Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="2">Memuat data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab-logs" class="tab-content">
+                <h3>Riwayat Pemenang (Realtime)</h3>
+                <div class="table-responsive">
+                    <table id="table-logs">
+                        <thead>
+                            <tr>
+                                <th>Waktu</th>
+                                <th>Nama</th>
+                                <th>Kelas</th>
+                                <th>Prize</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="4">Memuat data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="assets/js/admin.js"></script>
+</body>
+
+</html>

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Home | Sky Emperor</title>
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
@@ -12,23 +13,34 @@
       <img src="assets/photo/Logo_sky.png" alt="Sky Emperor" />
     </div>
     <nav>
-      <a href="index.html">Home</a>
+      <a href="index.html" class="active">Home</a>
       <a href="gacha.html">Gacha</a>
       <a href="login.html" id="nav-login">Login</a> 
     </nav>
   </header>
 
-  <main>
-    <section class="welcome">
-      <h1>WELCOME</h1>
-      <p>
-        <span style="font-size: 20px; font-weight: 400;">Join event, win prizes, and be the champion.</span>
+  <main class="home-page">
+    
+    <section class="hero-text">
+      <div class="badge">🔥 Event Gacha Sedang Berlangsung</div>
+      
+      <h1>SKY <span class="text-outline">EMPEROR</span></h1>
+      
+      <p class="hero-desc">
+        Komunitas warnet paling solid. <br>
+        Gabung eventnya, menangkan billing gratis, dan jadilah juara minggu ini.
       </p>
           
-      <a href="gacha.html" class="gacha-btn" style="background: transparent; color: white; border: 2px solid white; margin-left: 10px;">
-        Go to Gacha
-      </a>
+      <div class="cta-group">
+        <a href="gacha.html" class="btn-primary">Mulai Gacha</a>
+      </div>
     </section>
+
+    <section class="hero-visual">
+      <div class="glowing-orb"></div>
+      <div class="orb-backdrop"></div>
+    </section>
+
   </main>
 
   <script src="assets/js/navbar.js"></script>

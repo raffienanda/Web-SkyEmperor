@@ -1,87 +1,59 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login Member | Sky Emperor</title>
-  
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="assets/css/login.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Member | Sky Emperor</title>
+
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/login.css" />
 </head>
+
 <body>
-  <header>
-    <div class="logo">
-      <img src="assets/photo/Logo_sky.png" alt="Sky Emperor" />
-    </div>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="gacha.html">Gacha</a>
-        <a href="login.html" id="nav-login">Login</a> 
-    </nav>
-  </header>
+    <header>
+        <div class="logo">
+            <img src="assets/photo/Logo_sky.png" alt="Sky Emperor" />
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="gacha.html">Gacha</a>
+            <a href="login.html" id="nav-login" class="active">Login</a>
+        </nav>
+    </header>
 
-  <main class="login-page">
-    
-    <div class="login-box">
-      <div>
-        <h1>Login</h1>
-        <p>Masukan identitas untuk memulai</p>
-      </div>
-      
-      <div class="input-group">
-        <input type="text" id="login-nama" class="login-input" placeholder="Username Member">
-        <input type="text" id="login-kelas" class="login-input" placeholder="Kelas (Contoh: REG, VIP)">
-      </div>
-      
-      <button id="btn-login" class="login-btn">Masuk</button>
-    </div>
+    <main class="login-page">
 
-  </main>
+        <div class="login-box">
+            <div>
+                <h1>Login</h1>
+                <p>Masukan identitas untuk memulai</p>
+            </div>
 
-  <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbx9ezGFBv_Yme4VrP1CHHX2nuDeeXRh7nJ6zenkkUWZ5A5PfPiYz8k3eN8CXukLITK0/exec"; 
+            <div class="input-group">
+                <input type="text" id="login-nama" class="login-input" placeholder="Username Member">
 
-    document.getElementById("btn-login").addEventListener("click", async () => {
-      const nama = document.getElementById("login-nama").value.trim();
-      const kelas = document.getElementById("login-kelas").value.trim();
-      const btn = document.getElementById("btn-login");
+                <input type="text" id="login-kelas" class="login-input" list="list-kelas"
+                    placeholder="Pilih Kelas (atau ketik manual)">
 
-      if (!nama || !kelas) {
-        alert("Nama dan Kelas wajib diisi!");
-        return;
-      }
+                <datalist id="list-kelas">
+                    <option value="REG">
+                    <option value="VIP">
+                    <option value="VVIP">
+                </datalist>
+            </div>
 
-      btn.textContent = "Checking...";
-      btn.disabled = true;
+            <button id="btn-login" class="login-btn">Masuk</button>
+        </div>
 
-      const formData = new FormData();
-      formData.append("action", "login");
-      formData.append("nama", nama);
-      formData.append("kelas", kelas);
+    </main>
 
-      try {
-        const res = await fetch(scriptURL, { method: "POST", body: formData });
-        const data = await res.json();
+    <script>
+        
+    </script>
+    <script src="assets/js/login.js"></script>
 
-        if (data.status === "success") {
-          localStorage.setItem("user_skyemperor", JSON.stringify({
-            nama: data.nama,
-            kelas: data.kelas
-          }));
-          window.location.href = "gacha.html"; 
-        } else {
-          alert("Login Gagal: " + data.message);
-        }
-      } catch (err) {
-        console.error(err);
-        alert("Terjadi kesalahan koneksi.");
-      } finally {
-        btn.textContent = "Masuk";
-        btn.disabled = false;
-      }
-    });
-  </script>
-
-  <script src="assets/js/navbar.js"></script>
+    <script src="assets/js/navbar.js"></script>
 </body>
+
 </html>
