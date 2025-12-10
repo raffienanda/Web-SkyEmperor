@@ -1,6 +1,6 @@
 // assets/js/admin.js
 
-const scriptURL = "https://script.google.com/macros/s/AKfycbwxLApx-ZVsVHi_w0SjTiY2mWGxGPuozGegeapyPBMxw09GLQLkB7nySo4ykina80vlAw/exec"; // <-- Pastikan URL ini benar
+const scriptURL = "https://script.google.com/macros/s/AKfycbzPYM9hZj8okcY0plsHpmuVr6NYl2CvzIAeZFaUMfWY8asvl_QjiMoy311qftFE7Y4Z/exec"; // <-- Pastikan URL ini benar
 
 // === GLOBAL VARIABLES (Untuk menampung data member agar bisa di-search) ===
 let globalMembers = [];

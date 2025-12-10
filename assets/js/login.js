@@ -1,4 +1,4 @@
-const scriptURL = "https://script.google.com/macros/s/AKfycbwxLApx-ZVsVHi_w0SjTiY2mWGxGPuozGegeapyPBMxw09GLQLkB7nySo4ykina80vlAw/exec"; // <-- JANGAN LUPA GANTI
+const scriptURL = "https://script.google.com/macros/s/AKfycbzPYM9hZj8okcY0plsHpmuVr6NYl2CvzIAeZFaUMfWY8asvl_QjiMoy311qftFE7Y4Z/exec"; // <-- JANGAN LUPA GANTI
 
         document.getElementById("btn-login").addEventListener("click", async () => {
             const namaInput = document.getElementById("login-nama").value.trim();
@@ -18,7 +18,7 @@ const scriptURL = "https://script.google.com/macros/s/AKfycbwxLApx-ZVsVHi_w0SjTi
                 window.location.href = "admin.html"; // Arahkan ke dashboard admin
                 return;
             }
-            
+
 
             // === LOGIC MEMBER BIASA ===
             btn.textContent = "Checking...";

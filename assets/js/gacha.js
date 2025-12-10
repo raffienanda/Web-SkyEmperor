@@ -1,5 +1,5 @@
 // === GANTI URL INI DENGAN URL DEPLOYMENT BARU KAMU ===
-const scriptURL = "https://script.google.com/macros/s/AKfycbx9ezGFBv_Yme4VrP1CHHX2nuDeeXRh7nJ6zenkkUWZ5A5PfPiYz8k3eN8CXukLITK0/exec"; // <-- Pastikan ini URL terbaru
+const scriptURL = "https://script.google.com/macros/s/AKfycbzPYM9hZj8okcY0plsHpmuVr6NYl2CvzIAeZFaUMfWY8asvl_QjiMoy311qftFE7Y4Z/exec"; // <-- Pastikan ini URL terbaru
 
 let currentMember = { nama: null, kelas: null };
 let animationInterval = null;
