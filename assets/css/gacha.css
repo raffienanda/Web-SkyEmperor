@@ -348,8 +348,7 @@ main {
   text-align: center;
   transition: background 0.2s;
   
-  /* Reset properti nav a agar tidak konflik */
-  vertical-align: baseline;
+  
 }
 
 .dropdown-content a:hover {
