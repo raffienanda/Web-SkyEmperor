@@ -31,12 +31,13 @@ window.addEventListener("DOMContentLoaded", () => {
         // Cari tombol-tombol navigasi di sidebar kiri
         const navItems = document.querySelectorAll(".sidebar-nav .nav-item");
         
-        if (navItems.length >= 3) {
-            navItems[0].style.display = "none"; // Sembunyikan menu Member
-            navItems[1].style.display = "none"; // Sembunyikan menu Prize
+        // Sekarang jumlah menunya ada 4 (Dashboard, Member, Prize, History)
+        if (navItems.length >= 4) {
+            navItems[1].style.display = "none"; // Sembunyikan menu Member (urutan ke-2)
+            navItems[2].style.display = "none"; // Sembunyikan menu Prize (urutan ke-3)
             
-            // Pindahkan tab aktif secara paksa ke tab History (Logs)
-            switchTab('logs', navItems[2]); 
+            // Tidak perlu dipindah paksa ke History, 
+            // biarkan defaultnya terbuka di Dashboard (navItems[0])
         }
     }
 
