@@ -1,5 +1,5 @@
 // === GANTI URL INI DENGAN URL DEPLOYMENT BARU KAMU ===
-const scriptURL = "https://script.google.com/macros/s/AKfycbzPYM9hZj8okcY0plsHpmuVr6NYl2CvzIAeZFaUMfWY8asvl_QjiMoy311qftFE7Y4Z/exec"; // <-- Pastikan ini URL terbaru
+const scriptURL = "https://script.google.com/macros/s/AKfycbzRKWAQumKKeNHXOEdZ3acl5T8GFrOFA8iLSRkxr2H7iNWxgr_0XRwP86hDRLayNAGX6A/exec"; // <-- Pastikan ini URL terbaru
 
 let currentMember = { nama: null, kelas: null };
 let animationInterval = null;
@@ -11,7 +11,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // Kalau belum login, tendang balik ke index.html
   if (!session) {
     alert("Silakan login terlebih dahulu!");
-    window.location.href = "index.html";
+    window.location.href = "login.html";
     return;
   }
 
@@ -34,7 +34,7 @@ window.addEventListener("DOMContentLoaded", () => {
 window.logout = function() {
   if (confirm("Yakin ingin logout?")) {
     localStorage.removeItem("user_skyemperor");
-    window.location.href = "index.html";
+    window.location.href = "login.html";
   }
 };
 
@@ -115,7 +115,7 @@ if (gachaBtn) {
     // Safety check session lagi
     if (!currentMember.nama) {
         alert("Sesi habis, silakan login ulang.");
-        window.location.href = "index.html";
+        window.location.href = "login.html";
         return;
     }
 

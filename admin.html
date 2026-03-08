@@ -7,140 +7,187 @@
     <title>Admin Dashboard | Sky Emperor</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/admin.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-<body>
+<body class="admin-body">
 
-    <header>
-        <div class="logo">
-            <img src="assets/photo/Logo_sky.png" alt="Sky Emperor">
-            <span style="font-weight: 800; font-size: 20px; margin-left: 10px; color: #ffd700;">ADMIN PANEL</span>
-        </div>
-        <nav>
-            <a href="#" onclick="logoutAdmin()" style="color: #ff6b6b; font-weight:bold;">Logout</a>
-        </nav>
-    </header>
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/photo/Logo_sky.png" alt="Sky Emperor" class="sidebar-logo">
+                <i class="fa-solid fa-table-columns collapse-icon"></i>
+            </div>
 
-    <main class="admin-container">
+            <nav class="sidebar-nav">
+                <button class="nav-item active tab-btn" onclick="switchTab('members', this)">
+                    <i class="fa-solid fa-users"></i> Member
+                </button>
+                <button class="nav-item tab-btn" onclick="switchTab('prizes', this)">
+                    <i class="fa-solid fa-gift"></i> Prize
+                </button>
+                <button class="nav-item tab-btn" onclick="switchTab('logs', this)">
+                    <i class="fa-solid fa-clock-rotate-left"></i> History
+                </button>
+            </nav>
 
-        <div class="admin-tabs">
-            <button class="tab-btn active" onclick="switchTab('members')">👥 Members</button>
-            <button class="tab-btn" onclick="switchTab('prizes')">🎁 Prize Pool</button>
-            <button class="tab-btn" onclick="switchTab('logs')">🏆 Winners Log</button>
-        </div>
+            <div class="sidebar-footer">
+                <button class="nav-item logout-btn" onclick="logoutAdmin()">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
+                </button>
+            </div>
+        </aside>
 
-        <div class="admin-content-area">
+        <main class="main-content">
+            <header class="top-header"></header>
 
-            <div id="tab-members" class="tab-content active">
-                <div class="card-action">
-                    <h3>Tambah Member Baru</h3>
-                    <div class="input-row">
-                        <input type="text" id="new-member-name" placeholder="Nama (ex: nanda)">
-                        <input type="text" id="new-member-class" placeholder="Kelas (ex: VIP)">
-                        <button onclick="addMember()">+ Tambah</button>
+            <div class="content-wrapper">
+
+                <div id="tab-members" class="tab-content active">
+                    <div class="page-header">
+                        <h2>Member</h2>
+                        <div class="header-actions">
+                            <div class="search-box">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="search-member" placeholder="">
+                            </div>
+                            <button class="btn-tambah-outline" onclick="openAddModal()">+ Tambah</button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="table-members">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Kelas</th>
+                                    <th>Role</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4">Memuat data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <div style="margin-bottom: 15px;">
-                    <input type="text" id="search-member" class="search-input"
-                        placeholder="🔍 Cari Nama Member atau Kelas...">
-                </div>
+                <div id="tab-prizes" class="tab-content">
+                    <div class="page-header">
+                        <h2>Prize Pool</h2>
+                    </div>
 
-                <div class="table-responsive">
-                    <table id="table-members">
-                        <thead>
-                            <tr>
-                                <th>Nama</th>
-                                <th>Kelas</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="3">Memuat data...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                    <div class="card-action" style="margin-bottom: 20px;">
+                        <p style="font-size: 14px; color: #666;">Update Stok Hadiah (Nama item harus persis):</p>
+                        <div class="input-row" style="display: flex; gap: 10px; margin-top: 10px;">
+                            <input type="text" id="prize-item" list="list-prize" class="admin-input"
+                                placeholder="Item (ex: 1 Jam)">
+                            <input type="number" id="prize-stock" class="admin-input" placeholder="Stok Baru">
+                            <button onclick="updateStock()" class="btn-tambah-outline">Simpan</button>
 
-            <div id="tab-prizes" class="tab-content">
-                <div class="card-action">
-                    <h3>Update Stok Hadiah</h3>
-                    <p style="font-size: 14px; opacity: 0.8;">Nama item harus persis sama jika ingin update.</p>
-                    <div class="input-row">
-                        <input type="text" id="prize-item" list="list-prize" placeholder="Item (ex: 1 Jam)">
-                        <input type="number" id="prize-stock" placeholder="Stok Baru">
-                        <button onclick="updateStock()">Simpan</button>
+                            <datalist id="list-prize">
+                                <option value="1 Jam"></option>
+                                <option value="2 Jam"></option>
+                                <option value="3 Jam"></option>
+                                <option value="5 Jam"></option>
+                                <option value="10 Jam"></option>
+                                <option value="24 Jam"></option>
+                                <option value="50 Jam"></option>
+                            </datalist>
+                        </div>
+                    </div>
 
-                        <datalist id="list-prize">
-                            <option value="1 Jam">
-                            <option value="2 Jam">
-                            <option value="3 Jam">
-                            <option value="5 Jam">
-                            <option value="10 Jam">
-                            <option value="24 Jam">
-                            <option value="50 Jam">
-                        </datalist>
+                    <div class="table-container">
+                        <table id="table-prizes">
+                            <thead>
+                                <tr>
+                                    <th>Prize Item</th>
+                                    <th>Sisa Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="2">Memuat data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <div class="table-responsive">
-                    <table id="table-prizes">
-                        <thead>
-                            <tr>
-                                <th>Prize Item</th>
-                                <th>Sisa Stock</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="2">Memuat data...</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div id="tab-logs" class="tab-content">
+                    <div class="page-header">
+                        <h2>History Pemenang</h2>
+                        <div class="header-actions">
+                            <div class="search-box">
+                                <i class="fa-regular fa-calendar"></i>
+                                <input type="date" id="filter-date-logs"
+                                    style="cursor: pointer; font-family: 'Inter', sans-serif; color: #666; width: 130px;">
+                            </div>
+                            <button class="btn-action-pill pill-delete" onclick="resetFilterDate()"
+                                style="padding: 6px 15px;">Reset</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table id="table-logs">
+                            <thead>
+                                <tr>
+                                    <th>Waktu</th>
+                                    <th>Nama</th>
+                                    <th>Kelas</th>
+                                    <th>Prize</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4">Memuat data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-            <div id="tab-logs" class="tab-content">
-                <h3>Riwayat Pemenang (Realtime)</h3>
-                <div class="table-responsive">
-                    <table id="table-logs">
-                        <thead>
-                            <tr>
-                                <th>Waktu</th>
-                                <th>Nama</th>
-                                <th>Kelas</th>
-                                <th>Prize</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="4">Memuat data...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
             </div>
-
-        </div>
-    </main>
+        </main>
+    </div>
 
     <div id="edit-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeEditModal()">&times;</span>
             <h3>Edit Data Member</h3>
-
             <input type="hidden" id="edit-old-name">
-
-            <label style="font-size: 14px; font-weight: bold; color: #333;">Nama Member</label>
+            <label>Nama Member</label>
             <input type="text" id="edit-name" class="modal-input" placeholder="Nama Baru">
-
-            <label style="font-size: 14px; font-weight: bold; color: #333;">Kelas</label>
-            <input type="text" id="edit-class" class="modal-input" placeholder="Kelas Baru (REG/VIP)">
-
+            <label>Kelas</label>
+            <input type="text" id="edit-class" class="modal-input" placeholder="Kelas Baru (REG/VIP/VVIP)">
+            <label>Role</label>
+            <select id="edit-role" class="modal-input">
+                <option value="Member">Member</option>
+                <option value="Operator">Operator</option>
+                <option value="Admin">Admin</option>
+            </select>
             <button onclick="saveEditMember()" class="btn-save">Simpan Perubahan</button>
+        </div>
+    </div>
+
+    <div id="add-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAddModal()">&times;</span>
+            <h3>Tambah Member Baru</h3>
+            <label>Nama Member</label>
+            <input type="text" id="new-member-name" class="modal-input" placeholder="Nama (ex: Nanda)">
+            <label>Kelas</label>
+            <input type="text" id="new-member-class" class="modal-input" placeholder="Kelas (ex: VVIP)">
+            <label>Role</label>
+            <select id="new-member-role" class="modal-input">
+                <option value="Member">Member</option>
+                <option value="Operator">Operator</option>
+                <option value="Admin">Admin</option>
+            </select>
+            <button onclick="addMember()" class="btn-save">Tambah</button>
         </div>
     </div>
 

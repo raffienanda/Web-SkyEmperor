@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const confirmLogout = confirm(`Halo ${user.nama}, yakin ingin Logout?`);
         if (confirmLogout) {
           localStorage.removeItem("user_skyemperor");
-          window.location.href = "index.html"; 
+          window.location.href = "login.html"; 
         }
       });
     }

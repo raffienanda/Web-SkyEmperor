@@ -1,52 +1,80 @@
-const scriptURL = "https://script.google.com/macros/s/AKfycbzPYM9hZj8okcY0plsHpmuVr6NYl2CvzIAeZFaUMfWY8asvl_QjiMoy311qftFE7Y4Z/exec"; // <-- JANGAN LUPA GANTI
+const scriptURL = "https://script.google.com/macros/s/AKfycbzRKWAQumKKeNHXOEdZ3acl5T8GFrOFA8iLSRkxr2H7iNWxgr_0XRwP86hDRLayNAGX6A/exec"; // <-- Pastikan URL ini benar
 
-        document.getElementById("btn-login").addEventListener("click", async () => {
-            const namaInput = document.getElementById("login-nama").value.trim();
-            const kelasInput = document.getElementById("login-kelas").value.trim();
-            const btn = document.getElementById("btn-login");
+document.getElementById("btn-login").addEventListener("click", async () => {
+    const namaInput = document.getElementById("login-nama").value.trim();
+    const kelasInput = document.getElementById("login-kelas").value.trim();
+    const btn = document.getElementById("btn-login");
 
-            if (!namaInput || !kelasInput) {
-                alert("Nama dan Kelas wajib diisi!");
-                return;
+    if (!namaInput || !kelasInput) {
+        alert("Nama dan Kelas wajib diisi!");
+        return;
+    }
+
+    btn.textContent = "Checking...";
+    btn.disabled = true;
+
+    const formData = new FormData();
+    formData.append("action", "login");
+    formData.append("nama", namaInput);
+    formData.append("kelas", kelasInput);
+
+    try {
+        const res = await fetch(scriptURL, { method: "POST", body: formData });
+        const data = await res.json();
+
+        if (data.status === "success") {
+            // Ambil role dari database, pastikan formatnya aman (hilangkan spasi ekstra)
+            const userRole = (data.role || "Member").trim();
+
+            // Simpan data sesi ke LocalStorage
+            localStorage.setItem("user_skyemperor", JSON.stringify({
+                nama: data.nama,
+                kelas: data.kelas,
+                role: userRole
+            }));
+
+            // PENGATURAN REDIRECT (Ubah ke huruf kecil semua biar aman)
+            const cekRole = userRole.toLowerCase();
+
+            if (cekRole === "admin" || cekRole === "operator") {
+                window.location.href = "admin.html"; // Admin & Operator ke dashboard
+            } else {
+                window.location.href = "gacha.html"; // Member biasa ke gacha
             }
 
-            // === LOGIC ADMIN CHECK ===
-            // User: sky emperor, Pass: 88912202
-            if (namaInput.toLowerCase() === "sky emperor" && kelasInput === "88912202") {
-                alert("Login Berhasil sebagai ADMIN!");
-                localStorage.setItem("admin_skyemperor", "true"); // Kunci sesi admin
-                window.location.href = "admin.html"; // Arahkan ke dashboard admin
-                return;
-            }
+        } else {
+            alert("Login Gagal: " + data.message);
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Terjadi kesalahan koneksi.");
+    } finally {
+        btn.textContent = "Masuk";
+        btn.disabled = false;
+    }
+});
 
+// === FITUR HIDE/SHOW PASSWORD (KELAS) ===
+const togglePassword = document.getElementById("toggle-password");
+const kelasInput = document.getElementById("login-kelas");
 
-            // === LOGIC MEMBER BIASA ===
-            btn.textContent = "Checking...";
-            btn.disabled = true;
-
-            const formData = new FormData();
-            formData.append("action", "login");
-            formData.append("nama", namaInput);
-            formData.append("kelas", kelasInput);
-
-            try {
-                const res = await fetch(scriptURL, { method: "POST", body: formData });
-                const data = await res.json();
-
-                if (data.status === "success") {
-                    localStorage.setItem("user_skyemperor", JSON.stringify({
-                        nama: data.nama,
-                        kelas: data.kelas
-                    }));
-                    window.location.href = "gacha.html";
-                } else {
-                    alert("Login Gagal: " + data.message);
-                }
-            } catch (err) {
-                console.error(err);
-                alert("Terjadi kesalahan koneksi.");
-            } finally {
-                btn.textContent = "Masuk";
-                btn.disabled = false;
-            }
-        });
+if (togglePassword && kelasInput) {
+    togglePassword.addEventListener("click", function () {
+        // Cek tipe saat ini (password atau text)
+        const isPassword = kelasInput.getAttribute("type") === "password";
+        
+        // Ubah tipenya
+        kelasInput.setAttribute("type", isPassword ? "text" : "password");
+        
+        // Ubah icon mata dan warnanya
+        if (isPassword) {
+            this.classList.remove("fa-eye-slash");
+            this.classList.add("fa-eye");
+            this.style.color = "#0284c7"; // Warna biru saat terlihat
+        } else {
+            this.classList.remove("fa-eye");
+            this.classList.add("fa-eye-slash");
+            this.style.color = "#888"; // Warna abu-abu saat sembunyi
+        }
+    });
+}
