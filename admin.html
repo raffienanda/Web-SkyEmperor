@@ -21,7 +21,10 @@
             </div>
 
             <nav class="sidebar-nav">
-                <button class="nav-item active tab-btn" onclick="switchTab('members', this)">
+                <button class="nav-item active tab-btn" onclick="switchTab('dashboard', this)">
+                    <i class="fa-solid fa-chart-pie"></i> Dashboard
+                </button>
+                <button class="nav-item tab-btn" onclick="switchTab('members', this)">
                     <i class="fa-solid fa-users"></i> Member
                 </button>
                 <button class="nav-item tab-btn" onclick="switchTab('prizes', this)">
@@ -43,8 +46,34 @@
             <header class="top-header"></header>
 
             <div class="content-wrapper">
+                <div id="tab-dashboard" class="tab-content active">
+                    <div class="page-header">
+                        <h2>Dashboard & Analitik</h2>
+                    </div>
+                    
+                    <h3 style="font-size: 16px; margin-bottom: 10px; color: #475569;">Persentase Perolehan Hadiah</h3>
+                    <div class="dashboard-stats" id="dashboard-stats">
+                        <p>Memuat statistik...</p>
+                    </div>
 
-                <div id="tab-members" class="tab-content active">
+                    <div class="card-action" style="margin-top: 30px;">
+                        <h3>Top-Up Jatah Gacha Member</h3>
+                        <p style="font-size: 13px; color: #666;">Pilih member dari dropdown untuk menambah jatah spin mereka.</p>
+                        
+                        <div class="input-row" style="display: flex; gap: 10px; margin-top: 15px;">
+                            <select id="select-member-quota" class="admin-input" style="flex: 2;">
+                                <option value="">-- Pilih Member --</option>
+                            </select>
+                            <input type="number" id="input-quota-amount" class="admin-input" placeholder="Jumlah Spin (ex: 5)" style="flex: 1;">
+                            
+                            <button onclick="submitAddQuota()" class="btn-tambah-outline" style="flex: 1; background-color: #3b4e6b; color: white;">
+                                <i class="fa-solid fa-plus"></i> Tambah Jatah
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-members" class="tab-content">
                     <div class="page-header">
                         <h2>Member</h2>
                         <div class="header-actions">
@@ -63,12 +92,13 @@
                                     <th>Nama</th>
                                     <th>Kelas</th>
                                     <th>Role</th>
+                                    <th>Jatah Spin</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td colspan="4">Memuat data...</td>
+                                    <td colspan="5">Memuat data...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -169,6 +199,8 @@
                 <option value="Operator">Operator</option>
                 <option value="Admin">Admin</option>
             </select>
+            <label>Jatah Spin</label>
+            <input type="number" id="edit-count" class="modal-input" placeholder="0">
             <button onclick="saveEditMember()" class="btn-save">Simpan Perubahan</button>
         </div>
     </div>
@@ -187,6 +219,8 @@
                 <option value="Operator">Operator</option>
                 <option value="Admin">Admin</option>
             </select>
+            <label>Jatah Spin (Awal)</label>
+            <input type="number" id="new-member-count" class="modal-input" placeholder="0" value="0">
             <button onclick="addMember()" class="btn-save">Tambah</button>
         </div>
     </div>

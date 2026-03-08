@@ -1,4 +1,4 @@
-const scriptURL = "https://script.google.com/macros/s/AKfycbzRKWAQumKKeNHXOEdZ3acl5T8GFrOFA8iLSRkxr2H7iNWxgr_0XRwP86hDRLayNAGX6A/exec"; // <-- Pastikan URL ini benar
+const scriptURL = "https://script.google.com/macros/s/AKfycbzStOR2jCHZEmHhQIWqePA_Nzy19NAgaMHnnHQInIolzJf2Fr9JzOH1Es4-NspAEzGefg/exec"; // <-- Pastikan URL ini benar
 
 document.getElementById("btn-login").addEventListener("click", async () => {
     const namaInput = document.getElementById("login-nama").value.trim();

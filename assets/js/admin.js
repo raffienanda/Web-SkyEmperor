@@ -1,5 +1,5 @@
 // assets/js/admin.js
-const scriptURL = "https://script.google.com/macros/s/AKfycbzRKWAQumKKeNHXOEdZ3acl5T8GFrOFA8iLSRkxr2H7iNWxgr_0XRwP86hDRLayNAGX6A/exec"; 
+const scriptURL = "https://script.google.com/macros/s/AKfycbzStOR2jCHZEmHhQIWqePA_Nzy19NAgaMHnnHQInIolzJf2Fr9JzOH1Es4-NspAEzGefg/exec"; 
 
 // === GLOBAL VARIABLES ===
 let globalMembers = [];
@@ -68,13 +68,16 @@ async function loadAllData() {
         const res = await fetch(scriptURL + "?action=getAllData");
         const data = await res.json();
 
-        // SIMPAN DATA MEMBER KE VARIABEL GLOBAL
         globalMembers = data.members;
-        globalLogs = data.logs;
+        globalLogs = data.logs; 
 
         renderMembers(data.members);
         renderPrizes(data.prizes);
         renderLogs(data.logs);
+        
+        // TAMBAHKAN BARIS INI:
+        renderDashboard(); 
+        
     } catch (err) {
         console.error(err);
         alert("Gagal mengambil data database.");
@@ -87,26 +90,27 @@ function renderMembers(data) {
     tbody.innerHTML = "";
     
     if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Tidak ada data ditemukan.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Tidak ada data ditemukan.</td></tr>`;
         return;
     }
 
     data.forEach(row => {
-        // row[0] = Nama, row[1] = Kelas, row[2] = Role
-        let role = row[2] ? row[2] : "Member"; // Fallback kalau kosong
-        
-        // Warna text role biar beda
+        let role = row[2] ? row[2] : "Member"; 
         let roleColor = role === "Admin" ? "color: #dc2626; font-weight: bold;" : 
                         (role === "Operator" ? "color: #0284c7; font-weight: bold;" : "color: #666;");
+        
+        // AMBIL DATA JATAH SPIN (Kolom D / row[3])
+        let count = row[3] ? row[3] : 0;
 
         tbody.innerHTML += `
             <tr>
             <td style="color: #333; font-weight: 600;">${row[0]}</td>
             <td>${row[1]}</td>
             <td style="${roleColor}">${role}</td>
+            <td style="font-weight: 800; color: #10b981;">${count}x</td>
             <td>
                 <button class="btn-action-pill pill-delete" onclick="deleteMember('${row[0]}')">DELETE</button>
-                <button class="btn-action-pill pill-edit" onclick="openEditModal('${row[0]}', '${row[1]}', '${role}')">EDIT</button>
+                <button class="btn-action-pill pill-edit" onclick="openEditModal('${row[0]}', '${row[1]}', '${role}', '${count}')">EDIT</button>
             </td>
             </tr>`;
     });
@@ -180,12 +184,12 @@ function renderLogs(data) {
 async function addMember() {
     const nama = document.getElementById("new-member-name").value;
     const kelas = document.getElementById("new-member-class").value;
-    const role = document.getElementById("new-member-role").value; // Ambil nilai role
+    const role = document.getElementById("new-member-role").value; 
+    const count = document.getElementById("new-member-count").value; // AMBIL COUNT
     
     if (!nama || !kelas || !role) return alert("Lengkapi data!");
 
     if (confirm("Tambah member ini?")) {
-        // Ubah teks tombol jadi loading
         const btn = document.querySelector("#add-modal .btn-save");
         if(btn) { btn.textContent = "Menyimpan..."; btn.disabled = true; }
 
@@ -193,7 +197,8 @@ async function addMember() {
         fd.append("action", "addMember");
         fd.append("nama", nama);
         fd.append("kelas", kelas);
-        fd.append("role", role); // Kirim role ke server
+        fd.append("role", role); 
+        fd.append("count", count); // KIRIM COUNT KE SERVER
 
         await fetch(scriptURL, { method: "POST", body: fd });
         location.reload();
@@ -268,7 +273,8 @@ async function saveEditMember() {
     const oldName = document.getElementById("edit-old-name").value;
     const newName = document.getElementById("edit-name").value;
     const newClass = document.getElementById("edit-class").value;
-    const newRole = document.getElementById("edit-role").value; // Ambil nilai role
+    const newRole = document.getElementById("edit-role").value; 
+    const newCount = document.getElementById("edit-count").value; // AMBIL JATAH BARU
     
     if (!newName || !newClass) return alert("Data tidak boleh kosong!");
 
@@ -282,7 +288,8 @@ async function saveEditMember() {
         fd.append("oldName", oldName);
         fd.append("newName", newName);
         fd.append("newClass", newClass);
-        fd.append("newRole", newRole); // Kirim data role baru
+        fd.append("newRole", newRole); 
+        fd.append("newCount", newCount); // KIRIM KE SERVER
 
         await fetch(scriptURL, { method: "POST", body: fd });
         
@@ -466,5 +473,94 @@ window.onclick = function(event) {
     }
     if (event.target == addModal) {
         addModal.style.display = "none";
+    }
+}
+
+// === RENDER DASHBOARD (Statistik & Dropdown Top-Up) ===
+function renderDashboard() {
+    // 1. HITUNG STATISTIK PRESENTASE GACHA
+    const statsContainer = document.getElementById("dashboard-stats");
+    
+    if (globalLogs.length === 0) {
+        statsContainer.innerHTML = "<p style='color:#888;'>Belum ada data history gacha.</p>";
+    } else {
+        const totalGacha = globalLogs.length;
+        const prizeCounts = {};
+        
+        // Hitung berapa kali tiap hadiah didapat
+        globalLogs.forEach(log => {
+            const prize = log[3]; // Kolom Hadiah ada di index 3
+            prizeCounts[prize] = (prizeCounts[prize] || 0) + 1;
+        });
+
+        let htmlStats = "";
+        // Urutkan berdasarkan yang paling banyak didapat
+        const sortedPrizes = Object.entries(prizeCounts).sort((a, b) => b[1] - a[1]);
+
+        for (const [prize, count] of sortedPrizes) {
+            const percentage = ((count / totalGacha) * 100).toFixed(1);
+            htmlStats += `
+                <div class="stat-card">
+                    <h4>${prize}</h4>
+                    <div class="percent" style="color: ${percentage > 30 ? '#10b981' : '#0f172a'};">${percentage}%</div>
+                    <div class="count">${count} kali didapat</div>
+                </div>
+            `;
+        }
+        statsContainer.innerHTML = htmlStats;
+    }
+
+    // 2. ISI DROPDOWN MEMBER UNTUK TAMBAH JATAH
+    const selectMember = document.getElementById("select-member-quota");
+    if (selectMember) {
+        selectMember.innerHTML = '<option value="">-- Pilih Member --</option>'; // Reset awal
+        
+        globalMembers.forEach(member => {
+            const nama = member[0];
+            const kelas = member[1];
+            const sisaJatah = member[3] || 0;
+            
+            // Simpan nama dan kelas sebagai value untuk dikirim ke server
+            selectMember.innerHTML += `<option value="${nama}|${kelas}">${nama} (${kelas}) - Sisa Jatah: ${sisaJatah}x</option>`;
+        });
+    }
+}
+
+// === FUNGSI SUBMIT TAMBAH JATAH GACHA ===
+async function submitAddQuota() {
+    const selectVal = document.getElementById("select-member-quota").value;
+    const amount = document.getElementById("input-quota-amount").value;
+
+    if (!selectVal || !amount || amount <= 0) {
+        return alert("Pilih member dan masukkan jumlah jatah yang valid!");
+    }
+
+    // Pisahkan nama dan kelas dari value dropdown
+    const [nama, kelas] = selectVal.split("|");
+
+    if (confirm(`Tambahkan ${amount} jatah spin untuk ${nama}?`)) {
+        const btn = document.querySelector("button[onclick='submitAddQuota()']");
+        const originalText = btn.innerHTML;
+        btn.innerHTML = "Menambahkan...";
+        btn.disabled = true;
+
+        const fd = new FormData();
+        fd.append("action", "addQuota");
+        fd.append("nama", nama);
+        fd.append("kelas", kelas);
+        fd.append("amount", amount);
+
+        try {
+            await fetch(scriptURL, { method: "POST", body: fd });
+            alert(`Sukses! ${amount} Jatah gacha berhasil ditambahkan ke ${nama}.`);
+            
+            document.getElementById("input-quota-amount").value = ""; // Kosongkan input
+            location.reload(); // Refresh untuk melihat update
+        } catch (err) {
+            console.error(err);
+            alert("Terjadi kesalahan saat menambahkan jatah.");
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
     }
 }
