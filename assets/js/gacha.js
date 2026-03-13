@@ -1,171 +1,175 @@
-// === GANTI URL INI DENGAN URL DEPLOYMENT BARU KAMU ===
-const scriptURL = "https://script.google.com/macros/s/AKfycbzStOR2jCHZEmHhQIWqePA_Nzy19NAgaMHnnHQInIolzJf2Fr9JzOH1Es4-NspAEzGefg/exec"; // <-- Pastikan ini URL terbaru
+// === GANTI DENGAN URL APPS SCRIPT KAMU ===
+const scriptURL = "https://script.google.com/macros/s/AKfycby7WoVyO_Nij3z19VIqJR8DDoGy6i0X8L2B1fxesySffle7upN9DjimRpJXiD-Tb5Fn8Q/exec"; 
 
-let currentMember = { nama: null, kelas: null };
 let animationInterval = null;
+let activeMember = "";
+let remainingSpins = 0;
 
-// === 1. CEK LOGIN SAAT LOAD & LOAD LEADERBOARD ===
-window.addEventListener("DOMContentLoaded", () => {
-  const session = localStorage.getItem("user_skyemperor");
-  
-  // Kalau belum login, tendang balik ke index.html
-  if (!session) {
-    alert("Silakan login terlebih dahulu!");
-    window.location.href = "login.html";
-    return;
-  }
+window.addEventListener("DOMContentLoaded", loadLeaderboard);
 
-  // Kalau ada session, isi data member
-  const user = JSON.parse(session);
-  currentMember.nama = user.nama;
-  currentMember.kelas = user.kelas;
+// ==========================================
+// FUNGSI CUSTOM ALERT (BIAR GAK KELUAR FULLSCREEN)
+// ==========================================
+function showCustomAlert(title, text) {
+    document.getElementById("custom-alert-title").textContent = title;
+    document.getElementById("custom-alert-text").textContent = text;
+    document.getElementById("custom-alert").style.display = "flex";
+}
 
-  // Update tampilan nama di pojok kiri
-  const dispName = document.getElementById("display-name");
-  const dispClass = document.getElementById("display-class");
-  if(dispName) dispName.textContent = user.nama;
-  if(dispClass) dispClass.textContent = user.kelas;
+function closeCustomAlert() {
+    document.getElementById("custom-alert").style.display = "none";
+}
 
-  // Panggil fungsi load data (ini yang tadi error karena hilang)
-  loadLeaderboard(); 
-});
-
-// === 2. FUNGSI LOGOUT ===
-window.logout = function() {
-  if (confirm("Yakin ingin logout?")) {
-    localStorage.removeItem("user_skyemperor");
-    window.location.href = "login.html";
-  }
-};
-
-// === 3. FUNGSI LOAD LEADERBOARD (LOG) ===
+// ==========================================
+// LOAD LOG & ANIMASI MESIN
+// ==========================================
 async function loadLeaderboard() {
   const list = document.getElementById("leaderboard-list");
   if (!list) return;
-
   try {
-    // Tampilkan loading sederhana
-    // list.innerHTML = "<p>Loading...</p>"; // Opsional, bisa dimatikan biar ga kedip
-
-    const res = await fetch(scriptURL);
+    const res = await fetch(scriptURL + "?action=getAllData");
     const data = await res.json();
-
-    list.innerHTML = ""; // Bersihkan isi lama
-
-    if (!data || data.length === 0) {
-      list.innerHTML = "<p>Belum ada data.</p>";
-      return;
-    }
-
-    // Loop data dan masukkan ke HTML
-    data.forEach(item => {
+    const logs = data.logs || [];
+    const lastLogs = logs.slice(-20).reverse();
+    list.innerHTML = ""; 
+    if (lastLogs.length === 0) return list.innerHTML = "<p>Belum ada data.</p>";
+    lastLogs.forEach(item => {
+      let prizeVal = item.length >= 4 ? item[3] : item[2]; 
       const el = document.createElement("div");
       el.classList.add("leaderboard-item");
-      el.innerHTML = `<span>${item.nama} (${item.kelas})</span><span>${item.prize}</span>`;
+      el.innerHTML = `<span>${item[1]}</span><span>${prizeVal}</span>`;
       list.appendChild(el);
     });
-
   } catch (err) {
-    console.error("Gagal memuat leaderboard:", err);
     list.innerHTML = "<p>Gagal memuat data.</p>";
   }
 }
 
-// === 4. LOGIC ANIMASI VISUAL ===
 function startGachaAnimation() {
   const slots = document.querySelectorAll(".slot");
   if (slots.length === 0) return;
-
   animationInterval = setInterval(() => {
-    // Matikan semua highlight
     slots.forEach(slot => slot.classList.remove("active"));
-    
-    // Nyalakan satu secara acak
-    const randomIndex = Math.floor(Math.random() * slots.length);
-    slots[randomIndex].classList.add("active");
-  }, 100); // Kecepatan kedip (0.1 detik)
+    slots[Math.floor(Math.random() * slots.length)].classList.add("active");
+  }, 100); 
 }
 
 function stopGachaAnimation(winningPrize) {
-  clearInterval(animationInterval); // Stop acakan
-  
+  clearInterval(animationInterval); 
   const slots = document.querySelectorAll(".slot");
-  slots.forEach(slot => slot.classList.remove("active")); // Reset
-
-  // Cari kotak yang tulisannya sama dengan hadiah
-  let found = false;
+  slots.forEach(slot => slot.classList.remove("active")); 
   slots.forEach(slot => {
-    // Normalisasi text agar pencarian akurat (trim spasi)
-    if (slot.textContent.trim().toLowerCase() === winningPrize.trim().toLowerCase()) {
-      slot.classList.add("active"); // Highlight pemenang
-      found = true;
-    }
+    if (slot.textContent.trim().toLowerCase() === winningPrize.trim().toLowerCase()) slot.classList.add("active"); 
   });
-
-  if (!found && winningPrize !== "Semua hadiah habis!") {
-    console.warn("Hadiah tidak ada di slot visual:", winningPrize);
-  }
 }
 
-// === 5. TOMBOL GACHA (START) ===
-const gachaBtn = document.getElementById("gacha-btn");
-if (gachaBtn) {
-  gachaBtn.addEventListener("click", async () => {
-    
-    // Safety check session lagi
-    if (!currentMember.nama) {
-        alert("Sesi habis, silakan login ulang.");
-        window.location.href = "login.html";
-        return;
-    }
+// ==========================================
+// KONTROL MESIN GACHA (BEDA DEVICE)
+// ==========================================
+const btnRefresh = document.getElementById("btn-refresh");
+const btnGacha = document.getElementById("gacha-btn");
+const sessionInfo = document.getElementById("gacha-session-info");
+const dispName = document.getElementById("gacha-display-name");
+const dispSpins = document.getElementById("gacha-display-spins");
+
+function resetMesin() {
+    btnGacha.disabled = true;
+    btnGacha.textContent = "Menunggu Admin...";
+    btnGacha.style.backgroundColor = "#ccc";
+    btnGacha.style.color = "#666";
+    btnGacha.style.cursor = "not-allowed";
+    btnGacha.style.boxShadow = "none";
+    sessionInfo.style.display = "none";
+    activeMember = "";
+    remainingSpins = 0;
+}
+
+// 1. FUNGSI TOMBOL REFRESH
+if (btnRefresh) {
+    btnRefresh.addEventListener("click", async () => {
+        btnRefresh.textContent = "⏳ Mengecek...";
+        btnRefresh.disabled = true;
+
+        try {
+            const res = await fetch(scriptURL + "?action=getSession");
+            const data = await res.json();
+
+            if (data.spins > 0) {
+                activeMember = data.nama;
+                remainingSpins = data.spins;
+
+                dispName.textContent = activeMember;
+                dispSpins.textContent = remainingSpins;
+                sessionInfo.style.display = "block";
+
+                btnGacha.disabled = false;
+                btnGacha.textContent = `Start (${remainingSpins}x)`;
+                btnGacha.style.backgroundColor = "white";
+                btnGacha.style.color = "#1e3a8a";
+                btnGacha.style.cursor = "pointer";
+                btnGacha.style.boxShadow = "0 4px #263d6b";
+            } else {
+                // PAKAI CUSTOM ALERT
+                showCustomAlert("Gagal", "Belum ada sesi aktif dari Admin! Atau jatah sudah habis.");
+                resetMesin();
+            }
+        } catch (err) {
+            // PAKAI CUSTOM ALERT
+            showCustomAlert("Error", "Gagal terhubung ke server.");
+        }
+
+        btnRefresh.textContent = "🔄 Refresh Sesi";
+        btnRefresh.disabled = false;
+    });
+}
+
+// 2. FUNGSI TOMBOL START
+if (btnGacha) {
+  btnGacha.addEventListener("click", async () => {
+    if (remainingSpins <= 0 || !activeMember) return;
 
     try {
-      // Kunci tombol biar ga di-spam
-      gachaBtn.disabled = true;
-      gachaBtn.textContent = "Rolling..."; 
-      
-      // Mulai animasi visual (biar user seneng nunggu)
+      btnGacha.disabled = true;
+      btnGacha.textContent = "Rolling..."; 
       startGachaAnimation();
 
-      // Siapkan data kirim
       const formData = new FormData();
       formData.append("action", "spin"); 
-      formData.append("nama", currentMember.nama);
-      formData.append("kelas", currentMember.kelas);
 
-      // Request ke Google Sheet
       const res = await fetch(scriptURL, { method: "POST", body: formData });
       const result = await res.json();
       
-      // Stop animasi di item yang didapat
-      // Jika error/habis, tampilkan apa adanya
       const prizeText = result.prize || "Zonk";
       stopGachaAnimation(prizeText);
 
-      // Delay sedikit biar user lihat slot yang nyala, baru muncul alert
       setTimeout(() => {
-        if (prizeText.includes("habis") || prizeText.includes("Error") || prizeText.includes("Lengkap")) {
-             alert(prizeText); // Alert Error
+        if (prizeText.includes("habis") || prizeText.includes("Error")) {
+             // PAKAI CUSTOM ALERT
+             showCustomAlert("Maaf", prizeText);
+             resetMesin();
         } else {
-             alert(`Selamat ${currentMember.nama}! Kamu dapat: ${prizeText}`);
+             remainingSpins--; 
+             dispSpins.textContent = remainingSpins;
+             
+             // PAKAI CUSTOM ALERT
+             showCustomAlert("Selamat!", `Wow ${activeMember}! Kamu mendapatkan hadiah: ${prizeText}`);
+
+             if (remainingSpins > 0) {
+                btnGacha.textContent = `Start (${remainingSpins}x)`;
+                btnGacha.disabled = false;
+             } else {
+                resetMesin();
+             }
         }
         
-        // Reset tombol
-        gachaBtn.disabled = false;
-        gachaBtn.textContent = "Start";
-        
-        // Refresh Log Pemenang
-        loadLeaderboard();
+        loadLeaderboard(); 
       }, 500); 
 
     } catch (err) {
-      console.error(err);
       clearInterval(animationInterval);
-      document.querySelectorAll(".slot").forEach(s => s.classList.remove("active"));
-      
-      alert("Terjadi kesalahan koneksi atau Script URL salah.");
-      gachaBtn.disabled = false;
-      gachaBtn.textContent = "Start";
+      showCustomAlert("Error", "Terjadi kesalahan koneksi saat memutar mesin.");
+      btnGacha.textContent = `Start (${remainingSpins}x)`;
+      btnGacha.disabled = false;
     }
   });
 }

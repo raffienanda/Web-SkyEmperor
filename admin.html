@@ -12,14 +12,12 @@
 </head>
 
 <body class="admin-body">
-
     <div class="admin-layout">
         <aside class="sidebar">
             <div class="sidebar-header">
                 <img src="assets/photo/Logo_sky.png" alt="Sky Emperor" class="sidebar-logo">
                 <i class="fa-solid fa-table-columns collapse-icon"></i>
             </div>
-
             <nav class="sidebar-nav">
                 <button class="nav-item active tab-btn" onclick="switchTab('dashboard', this)">
                     <i class="fa-solid fa-chart-pie"></i> Dashboard
@@ -33,8 +31,10 @@
                 <button class="nav-item tab-btn" onclick="switchTab('logs', this)">
                     <i class="fa-solid fa-clock-rotate-left"></i> History
                 </button>
+                <button class="nav-item tab-btn" onclick="switchTab('gacha', this)">
+                    <i class="fa-solid fa-gamepad"></i> Gacha
+                </button>
             </nav>
-
             <div class="sidebar-footer">
                 <button class="nav-item logout-btn" onclick="logoutAdmin()">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
@@ -50,26 +50,9 @@
                     <div class="page-header">
                         <h2>Dashboard & Analitik</h2>
                     </div>
-                    
                     <h3 style="font-size: 16px; margin-bottom: 10px; color: #475569;">Persentase Perolehan Hadiah</h3>
                     <div class="dashboard-stats" id="dashboard-stats">
                         <p>Memuat statistik...</p>
-                    </div>
-
-                    <div class="card-action" style="margin-top: 30px;">
-                        <h3>Top-Up Jatah Gacha Member</h3>
-                        <p style="font-size: 13px; color: #666;">Pilih member dari dropdown untuk menambah jatah spin mereka.</p>
-                        
-                        <div class="input-row" style="display: flex; gap: 10px; margin-top: 15px;">
-                            <select id="select-member-quota" class="admin-input" style="flex: 2;">
-                                <option value="">-- Pilih Member --</option>
-                            </select>
-                            <input type="number" id="input-quota-amount" class="admin-input" placeholder="Jumlah Spin (ex: 5)" style="flex: 1;">
-                            
-                            <button onclick="submitAddQuota()" class="btn-tambah-outline" style="flex: 1; background-color: #3b4e6b; color: white;">
-                                <i class="fa-solid fa-plus"></i> Tambah Jatah
-                            </button>
-                        </div>
                     </div>
                 </div>
 
@@ -84,7 +67,6 @@
                             <button class="btn-tambah-outline" onclick="openAddModal()">+ Tambah</button>
                         </div>
                     </div>
-
                     <div class="table-container">
                         <table id="table-members">
                             <thead>
@@ -92,13 +74,12 @@
                                     <th>Nama</th>
                                     <th>Kelas</th>
                                     <th>Role</th>
-                                    <th>Jatah Spin</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td colspan="5">Memuat data...</td>
+                                    <td colspan="4">Memuat data...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -109,7 +90,6 @@
                     <div class="page-header">
                         <h2>Prize Pool</h2>
                     </div>
-
                     <div class="card-action" style="margin-bottom: 20px;">
                         <p style="font-size: 14px; color: #666;">Update Stok Hadiah (Nama item harus persis):</p>
                         <div class="input-row" style="display: flex; gap: 10px; margin-top: 10px;">
@@ -117,7 +97,6 @@
                                 placeholder="Item (ex: 1 Jam)">
                             <input type="number" id="prize-stock" class="admin-input" placeholder="Stok Baru">
                             <button onclick="updateStock()" class="btn-tambah-outline">Simpan</button>
-
                             <datalist id="list-prize">
                                 <option value="1 Jam"></option>
                                 <option value="2 Jam"></option>
@@ -129,7 +108,6 @@
                             </datalist>
                         </div>
                     </div>
-
                     <div class="table-container">
                         <table id="table-prizes">
                             <thead>
@@ -166,7 +144,6 @@
                                 <tr>
                                     <th>Waktu</th>
                                     <th>Nama</th>
-                                    <th>Kelas</th>
                                     <th>Prize</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -177,6 +154,38 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <div id="tab-gacha" class="tab-content">
+                    <div class="page-header" style="margin-bottom: 20px;">
+                        <h2>Mesin Gacha</h2>
+                    </div>
+
+                    <iframe id="iframe-gacha" src="gacha.html"
+                        style="width: 100%; height: calc(100vh - 150px); border: none; border-radius: 16px; background: #243e81;"></iframe>
+
+
+                    <div class="card-action"
+                        style="margin-bottom: 15px; padding: 20px; border-radius: 12px; display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
+                        <input type="text" id="admin-gacha-nama" class="admin-input"
+                            placeholder="Nama Member (ex: Budi)" style="flex: 1; min-width: 200px;">
+
+                        <select id="admin-gacha-billing" class="admin-input" style="flex: 1; min-width: 200px;">
+                            <option value="">-- Pilih Paket Billing --</option>
+                            <option value="1">5 Jam (1x Gacha)</option>
+                            <option value="2">10 Jam ke atas (2x Gacha)</option>
+                        </select>
+
+
+                        <button id="admin-btn-setgacha" class="btn-tambah-outline"
+                            style="background: #10b981; color: white; border: none; padding: 10px 20px;">
+                            <i class="fa-solid fa-paper-plane"></i> Kirim ke Mesin
+                        </button>
+                        <button onclick="openFullscreenGacha()" class="btn-tambah-outline"
+                            style="background: #3b82f6; color: white; border: none; padding: 10px 20px;">
+                            <i class="fa-solid fa-expand"></i> Full Screen
+                        </button>
                     </div>
                 </div>
 
@@ -199,8 +208,6 @@
                 <option value="Operator">Operator</option>
                 <option value="Admin">Admin</option>
             </select>
-            <label>Jatah Spin</label>
-            <input type="number" id="edit-count" class="modal-input" placeholder="0">
             <button onclick="saveEditMember()" class="btn-save">Simpan Perubahan</button>
         </div>
     </div>
@@ -219,8 +226,6 @@
                 <option value="Operator">Operator</option>
                 <option value="Admin">Admin</option>
             </select>
-            <label>Jatah Spin (Awal)</label>
-            <input type="number" id="new-member-count" class="modal-input" placeholder="0" value="0">
             <button onclick="addMember()" class="btn-save">Tambah</button>
         </div>
     </div>
