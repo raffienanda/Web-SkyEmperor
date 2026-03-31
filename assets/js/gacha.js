@@ -1,5 +1,5 @@
 // === GANTI DENGAN URL APPS SCRIPT KAMU ===
-const scriptURL = "https://script.google.com/macros/s/AKfycbxjt9UpZX3l8_bjHxcXW8p5BEtsKfGwMkjgx6hrsZMvY-KIJxH4_0ykU11GKtorCkwdAA/exec"; 
+const scriptURL = "https://script.google.com/macros/s/AKfycbzXifCyzfJz0ad9du6CmXwS_5qBsgxmbW9wQQVpVfvvMtRVn0dHRLEqes2d0xP1ttTXsA/exec"; 
 
 let animationInterval = null;
 let activeMember = "";
@@ -133,7 +133,7 @@ setInterval(() => {
     
     // Mengecek log pemenang terbaru (agar ikut auto-update)
     loadLeaderboard();
-}, 1000);
+}, 5000);
 
 // ----------------------------------------------------
 // TOMBOL REFRESH MANUAL (Opsional: Jika user tidak sabar menunggu 5 detik)

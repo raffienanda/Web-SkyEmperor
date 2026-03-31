@@ -1,7 +1,7 @@
-const scriptURL = "https://script.google.com/macros/s/AKfycbxjt9UpZX3l8_bjHxcXW8p5BEtsKfGwMkjgx6hrsZMvY-KIJxH4_0ykU11GKtorCkwdAA/exec"; 
+const scriptURL = "https://script.google.com/macros/s/AKfycbzXifCyzfJz0ad9du6CmXwS_5qBsgxmbW9wQQVpVfvvMtRVn0dHRLEqes2d0xP1ttTXsA/exec";
 
 let globalMembers = [];
-let globalLogs = []; 
+let globalLogs = [];
 
 const sessionString = localStorage.getItem("user_skyemperor");
 if (!sessionString) {
@@ -26,15 +26,15 @@ window.addEventListener("DOMContentLoaded", () => {
         // Ambil nama depan saja biar tidak kepanjangan
         const firstName = userSession.nama.split(" ")[0];
         adminNameDisplay.textContent = firstName;
-        adminRoleDisplay.textContent = userRole; 
+        adminRoleDisplay.textContent = userRole;
     }
     // -----------------------------------------------------------
 
     if (userRole === "operator") {
         const navItems = document.querySelectorAll(".sidebar-nav .nav-item");
         if (navItems.length >= 4) {
-            navItems[1].style.display = "none"; 
-            navItems[2].style.display = "none"; 
+            navItems[1].style.display = "none";
+            navItems[2].style.display = "none";
         }
     }
     loadAllData();
@@ -47,7 +47,7 @@ if (searchInput) {
         const filteredMembers = globalMembers.filter(row => {
             const nama = (row[0] || "").toString().toLowerCase();
             const kelas = (row[1] || "").toString().toLowerCase();
-            const role = (row[2] || "").toString().toLowerCase(); 
+            const role = (row[2] || "").toString().toLowerCase();
             return nama.includes(keyword) || kelas.includes(keyword) || role.includes(keyword);
         });
         renderMembers(filteredMembers);
@@ -58,14 +58,14 @@ async function loadAllData() {
     try {
         const res = await fetch(scriptURL + "?action=getAllData");
         const data = await res.json();
-        
+
         globalMembers = data.members || [];
-        globalLogs = data.logs || []; 
+        globalLogs = data.logs || [];
 
         renderMembers(globalMembers);
         renderPrizes(data.prizes || []);
         renderLogs(globalLogs);
-        renderDashboard(); 
+        renderDashboard();
     } catch (err) {
         console.error(err);
     }
@@ -75,17 +75,17 @@ async function loadAllData() {
 function renderMembers(data) {
     const tbody = document.querySelector("#table-members tbody");
     tbody.innerHTML = "";
-    
+
     if (data.length === 0) {
         tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Tidak ada data ditemukan.</td></tr>`;
         return;
     }
 
     data.forEach(row => {
-        let role = row[2] ? row[2] : "Member"; 
-        let roleColor = role === "Admin" ? "color: #dc2626; font-weight: bold;" : 
-                        (role === "Operator" ? "color: #0284c7; font-weight: bold;" : "color: #666;");
-        
+        let role = row[2] ? row[2] : "Member";
+        let roleColor = role === "Admin" ? "color: #dc2626; font-weight: bold;" :
+            (role === "Operator" ? "color: #0284c7; font-weight: bold;" : "color: #666;");
+
         tbody.innerHTML += `
             <tr>
             <td style="color: #333; font-weight: 600;">${row[0]}</td>
@@ -115,18 +115,26 @@ function renderPrizes(data) {
 function renderLogs(data) {
     const tbody = document.querySelector("#table-logs tbody");
     tbody.innerHTML = "";
+    
+    // Membalik urutan agar log terbaru muncul di paling atas
     const reversed = data.slice().reverse();
     const printedLogs = getPrintedLogs();
 
     reversed.forEach(row => {
+        // Kolom A (index 0): Waktu
         let dateObj = new Date(row[0]);
         let timeString = isNaN(dateObj) ? row[0] : dateObj.toLocaleString();
 
-        let safeTime = timeString.replace(/'/g, "\\'");
-        let safeName = row[1].toString().replace(/'/g, "\\'");
+        // Kolom B (index 1): Nama Member
+        let safeName = row[1] ? row[1].toString().replace(/'/g, "\\'") : "-";
+
+        // Kolom C (index 2): Prize (Hadiah)
         let safePrize = row[2] ? row[2].toString().replace(/'/g, "\\'") : "-"; 
 
-        // Hindari error karakter btoa dengan encodeURIComponent
+        // Kolom D (index 3): Admin/Operator yang memberi jatah
+        let adminGiver = row[3] ? row[3] : "-"; 
+
+        let safeTime = timeString.replace(/'/g, "\\'");
         let logId = btoa(encodeURIComponent(safeTime + safeName + safePrize)); 
         
         let isPrinted = printedLogs.includes(logId);
@@ -139,15 +147,16 @@ function renderLogs(data) {
 
         tbody.innerHTML += `
             <tr>
-            <td style="font-size:12px;">${timeString}</td>
-            <td>${row[1]}</td>
-            <td style="color:#d97706; font-weight:800;">${safePrize}</td>
-            <td>
-                <button class="btn-action-pill" style="${btnStyle}" 
-                onclick="printStruk('${safeTime}', '${safeName}', '${safePrize}', '${logId}')">
-                    ${btnText}
-                </button>
-            </td>
+                <td style="font-size:12px;">${timeString}</td>
+                <td>${row[1]}</td>
+                <td style="color:#d97706; font-weight:800;">${safePrize}</td>
+                <td style="font-style: italic; color: #3b4e6b;">${adminGiver}</td>
+                <td>
+                    <button class="btn-action-pill" style="${btnStyle}" 
+                    onclick="printStruk('${safeTime}', '${safeName}', '${safePrize}', '${logId}')">
+                        ${btnText}
+                    </button>
+                </td>
             </tr>`;
     });
 }
@@ -156,19 +165,19 @@ function renderLogs(data) {
 async function addMember() {
     const nama = document.getElementById("new-member-name").value;
     const kelas = document.getElementById("new-member-class").value;
-    const role = document.getElementById("new-member-role").value; 
-    
+    const role = document.getElementById("new-member-role").value;
+
     if (!nama || !kelas || !role) return alert("Lengkapi data!");
 
     if (confirm("Tambah member ini?")) {
         const btn = document.querySelector("#add-modal .btn-save");
-        if(btn) { btn.textContent = "Menyimpan..."; btn.disabled = true; }
+        if (btn) { btn.textContent = "Menyimpan..."; btn.disabled = true; }
 
         const fd = new FormData();
         fd.append("action", "addMember");
         fd.append("nama", nama);
         fd.append("kelas", kelas);
-        fd.append("role", role); 
+        fd.append("role", role);
 
         await fetch(scriptURL, { method: "POST", body: fd });
         location.reload();
@@ -201,13 +210,13 @@ async function updateStock() {
 function switchTab(tabName, element) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
     document.getElementById('tab-' + tabName).classList.add('active');
-    
+
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-    if(element) element.classList.add('active');
+    if (element) element.classList.add('active');
 }
 
 function logoutAdmin() {
-    if(confirm("Yakin ingin log out?")) {
+    if (confirm("Yakin ingin log out?")) {
         localStorage.removeItem("user_skyemperor");
         window.location.href = "login.html";
     }
@@ -215,7 +224,7 @@ function logoutAdmin() {
 
 function openEditModal(name, kelas, role) {
     const modal = document.getElementById("edit-modal");
-    document.getElementById("edit-old-name").value = name; 
+    document.getElementById("edit-old-name").value = name;
     document.getElementById("edit-name").value = name;
     document.getElementById("edit-class").value = kelas;
     document.getElementById("edit-role").value = role;
@@ -230,8 +239,8 @@ async function saveEditMember() {
     const oldName = document.getElementById("edit-old-name").value;
     const newName = document.getElementById("edit-name").value;
     const newClass = document.getElementById("edit-class").value;
-    const newRole = document.getElementById("edit-role").value; 
-    
+    const newRole = document.getElementById("edit-role").value;
+
     if (!newName || !newClass) return alert("Data tidak boleh kosong!");
 
     const btn = document.querySelector("#edit-modal .btn-save");
@@ -244,11 +253,11 @@ async function saveEditMember() {
         fd.append("oldName", oldName);
         fd.append("newName", newName);
         fd.append("newClass", newClass);
-        fd.append("newRole", newRole); 
+        fd.append("newRole", newRole);
 
         await fetch(scriptURL, { method: "POST", body: fd });
         alert("Data Berhasil Diupdate!");
-        location.reload(); 
+        location.reload();
     } catch (err) {
         alert("Gagal mengupdate data.");
         btn.textContent = "Simpan Perubahan";
@@ -314,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const filterDateInput = document.getElementById("filter-date-logs");
 if (filterDateInput) {
     filterDateInput.addEventListener("change", (e) => {
-        const selectedDate = e.target.value; 
+        const selectedDate = e.target.value;
         if (!selectedDate) return renderLogs(globalLogs);
 
         const filteredLogs = globalLogs.filter(row => {
@@ -331,11 +340,11 @@ if (filterDateInput) {
 
 function resetFilterDate() {
     const dateInput = document.getElementById("filter-date-logs");
-    if (dateInput) dateInput.value = ""; 
-    renderLogs(globalLogs); 
+    if (dateInput) dateInput.value = "";
+    renderLogs(globalLogs);
 }
 
-window.onclick = function(event) {
+window.onclick = function (event) {
     const editModal = document.getElementById("edit-modal");
     const addModal = document.getElementById("add-modal");
     if (event.target == editModal) editModal.style.display = "none";
@@ -375,13 +384,17 @@ function renderDashboard() {
 // ==========================================
 const btnSetGacha = document.getElementById("admin-btn-setgacha");
 
+// Di dalam assets/js/admin.js
 if (btnSetGacha) {
     btnSetGacha.addEventListener("click", async () => {
         const nama = document.getElementById("admin-gacha-nama").value.trim();
         const paket = document.getElementById("admin-gacha-billing").value;
-        
+
+        // AMBIL NAMA ADMIN DARI SESSION LOGIN
+        const adminName = userSession ? userSession.nama : "Unknown Admin";
+
         if (!nama || !paket) return alert("Isi Nama dan pilih Paket Billing!");
-        
+
         btnSetGacha.textContent = "Mengirim...";
         btnSetGacha.disabled = true;
 
@@ -390,15 +403,14 @@ if (btnSetGacha) {
             fd.append("action", "setSession");
             fd.append("nama", nama);
             fd.append("spins", paket);
+            fd.append("admin", adminName); // TAMBAHKAN INI: Mengirim nama admin ke spreadsheet
 
-            // Tembak data sesi ke Server (Google Script)
             await fetch(scriptURL, { method: "POST", body: fd });
-            
-            // Reset form admin
+
             document.getElementById("admin-gacha-nama").value = "";
             document.getElementById("admin-gacha-billing").value = "";
-            
-            alert(`Sesi Gacha untuk ${nama} (${paket}x) berhasil dikirim ke Server!\n\nSilakan klik tombol REFRESH di Layar Mesin Gacha.`);
+
+            alert(`Sesi Gacha berhasil dikirim oleh ${adminName}!`);
         } catch (err) {
             alert("Gagal terhubung ke server.");
         }
@@ -420,7 +432,7 @@ function openFullscreenGacha() {
 // ==========================================
 function openFullscreenGacha() {
     const elem = document.getElementById("iframe-gacha");
-    
+
     // Pengecekan agar support di berbagai jenis browser
     if (elem.requestFullscreen) {
         elem.requestFullscreen();
