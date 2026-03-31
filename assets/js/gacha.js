@@ -84,92 +84,163 @@ function resetMesin() {
     remainingSpins = 0;
 }
 
-// 1. FUNGSI TOMBOL REFRESH
+// 1. FUNGSI CEK SESI (AUTO & MANUAL)
+// ==========================================
+async function checkSession(isManual = false) {
+    // Jika user sedang punya jatah spin atau sedang menekan tombol, jangan timpa datanya
+    if (remainingSpins > 0 && !isManual) return;
+
+    try {
+        const res = await fetch(scriptURL + "?action=getSession");
+        const data = await res.json();
+
+        if (data.spins > 0) {
+            activeMember = data.nama;
+            remainingSpins = data.spins;
+
+            dispName.textContent = activeMember;
+            dispSpins.textContent = remainingSpins;
+            sessionInfo.style.display = "block";
+
+            btnGacha.disabled = false;
+            // Gunakan teks "Tahan Tombol" atau "Start" sesuai implementasi kamu sebelumnya
+            btnGacha.textContent = `Tahan Tombol (${remainingSpins}x)`; 
+            btnGacha.style.backgroundColor = "white";
+            btnGacha.style.color = "#1e3a8a";
+            btnGacha.style.cursor = "pointer";
+            btnGacha.style.boxShadow = "0 4px #263d6b";
+        } else {
+            // Hanya munculkan pop-up alert JIKA user mengecek secara manual
+            // Supaya saat auto-refresh tidak muncul pop-up spam terus-menerus
+            if (isManual) {
+                showCustomAlert("Gagal", "Belum ada sesi aktif dari Admin! Atau jatah sudah habis.");
+            }
+            resetMesin();
+        }
+    } catch (err) {
+        if (isManual) {
+            showCustomAlert("Error", "Gagal terhubung ke server.");
+        }
+    }
+}
+
+// ----------------------------------------------------
+// AUTO-REFRESH SETIAP 5 DETIK (5000 ms)
+// ----------------------------------------------------
+setInterval(() => {
+    // Mengecek apakah ada sesi spin baru dari Admin
+    checkSession(false);
+    
+    // Mengecek log pemenang terbaru (agar ikut auto-update)
+    loadLeaderboard();
+}, 1000);
+
+// ----------------------------------------------------
+// TOMBOL REFRESH MANUAL (Opsional: Jika user tidak sabar menunggu 5 detik)
+// ----------------------------------------------------
 if (btnRefresh) {
     btnRefresh.addEventListener("click", async () => {
         btnRefresh.textContent = "⏳ Mengecek...";
         btnRefresh.disabled = true;
-
-        try {
-            const res = await fetch(scriptURL + "?action=getSession");
-            const data = await res.json();
-
-            if (data.spins > 0) {
-                activeMember = data.nama;
-                remainingSpins = data.spins;
-
-                dispName.textContent = activeMember;
-                dispSpins.textContent = remainingSpins;
-                sessionInfo.style.display = "block";
-
-                btnGacha.disabled = false;
-                btnGacha.textContent = `Start (${remainingSpins}x)`;
-                btnGacha.style.backgroundColor = "white";
-                btnGacha.style.color = "#1e3a8a";
-                btnGacha.style.cursor = "pointer";
-                btnGacha.style.boxShadow = "0 4px #263d6b";
-            } else {
-                // PAKAI CUSTOM ALERT
-                showCustomAlert("Gagal", "Belum ada sesi aktif dari Admin! Atau jatah sudah habis.");
-                resetMesin();
-            }
-        } catch (err) {
-            // PAKAI CUSTOM ALERT
-            showCustomAlert("Error", "Gagal terhubung ke server.");
-        }
-
+        
+        await checkSession(true); // true = tampilkan alert jika gagal/kosong
+        
         btnRefresh.textContent = "🔄 Refresh Sesi";
         btnRefresh.disabled = false;
     });
 }
 
-// 2. FUNGSI TOMBOL START
+// 2. FUNGSI TOMBOL START (SISTEM HOLD / TAHAN)
 if (btnGacha) {
-  btnGacha.addEventListener("click", async () => {
-    if (remainingSpins <= 0 || !activeMember) return;
+    let isHolding = false;
+    let isFetching = false; // Mencegah double klik atau request ganda
 
-    try {
-      btnGacha.disabled = true;
-      btnGacha.textContent = "Rolling..."; 
-      startGachaAnimation();
-
-      const formData = new FormData();
-      formData.append("action", "spin"); 
-
-      const res = await fetch(scriptURL, { method: "POST", body: formData });
-      const result = await res.json();
-      
-      const prizeText = result.prize || "Zonk";
-      stopGachaAnimation(prizeText);
-
-      setTimeout(() => {
-        if (prizeText.includes("habis") || prizeText.includes("Error")) {
-             // PAKAI CUSTOM ALERT
-             showCustomAlert("Maaf", prizeText);
-             resetMesin();
-        } else {
-             remainingSpins--; 
-             dispSpins.textContent = remainingSpins;
-             
-             // PAKAI CUSTOM ALERT
-             showCustomAlert("Selamat!", `Wow ${activeMember}! Kamu mendapatkan hadiah: ${prizeText}`);
-
-             if (remainingSpins > 0) {
-                btnGacha.textContent = `Start (${remainingSpins}x)`;
-                btnGacha.disabled = false;
-             } else {
-                resetMesin();
-             }
-        }
+    // Fungsi saat tombol mulai DITAHAN
+    const startHold = (e) => {
+        // Abaikan jika sisa spin habis atau sedang mengambil data server
+        if (remainingSpins <= 0 || !activeMember || isFetching) return;
         
-        loadLeaderboard(); 
-      }, 500); 
+        isHolding = true;
+        
+        // Ubah tampilan tombol saat ditekan
+        btnGacha.textContent = "Lepas untuk Berhenti!";
+        btnGacha.style.transform = "scale(0.95)"; 
+        btnGacha.style.boxShadow = "none";
+        
+        // Mulai animasi putaran mesin secara terus menerus
+        startGachaAnimation();
+    };
 
-    } catch (err) {
-      clearInterval(animationInterval);
-      showCustomAlert("Error", "Terjadi kesalahan koneksi saat memutar mesin.");
-      btnGacha.textContent = `Start (${remainingSpins}x)`;
-      btnGacha.disabled = false;
-    }
-  });
+    // Fungsi saat tombol DILEPAS
+    const releaseHold = async (e) => {
+        // Cegah eksekusi jika tidak sedang menahan tombol
+        if (!isHolding || isFetching) return;
+
+        isHolding = false;
+        isFetching = true;
+        
+        // Kembalikan ukuran tombol dan nonaktifkan sementara
+        btnGacha.style.transform = ""; 
+        btnGacha.disabled = true;
+        btnGacha.textContent = "Mengambil Hasil...";
+
+        try {
+            // Setelah tombol dilepas, baru kita request hadiahnya ke server
+            const formData = new FormData();
+            formData.append("action", "spin"); 
+
+            const res = await fetch(scriptURL, { method: "POST", body: formData });
+            const result = await res.json();
+            
+            const prizeText = result.prize || "Zonk";
+            
+            // Hentikan animasi tepat di hadiah yang didapat dari server
+            stopGachaAnimation(prizeText);
+
+            // Beri jeda sedikit agar user melihat slot berhenti sebelum muncul Pop-up
+            setTimeout(() => {
+                if (prizeText.includes("habis") || prizeText.includes("Error")) {
+                     showCustomAlert("Maaf", prizeText);
+                     resetMesin();
+                } else {
+                     remainingSpins--; 
+                     dispSpins.textContent = remainingSpins;
+                     
+                     showCustomAlert("Selamat!", `Wow ${activeMember}! Kamu mendapatkan hadiah: ${prizeText}`);
+
+                     if (remainingSpins > 0) {
+                        btnGacha.textContent = `Tahan Tombol (${remainingSpins}x)`;
+                        btnGacha.disabled = false;
+                     } else {
+                        resetMesin();
+                     }
+                }
+                
+                loadLeaderboard(); 
+            }, 600); // 600ms jeda sebelum pop-up muncul
+
+        } catch (err) {
+            clearInterval(animationInterval);
+            showCustomAlert("Error", "Terjadi kesalahan koneksi saat memutar mesin.");
+            btnGacha.textContent = `Tahan Tombol (${remainingSpins}x)`;
+            btnGacha.disabled = false;
+        } finally {
+            isFetching = false;
+        }
+    };
+
+    // --- EVENT LISTENERS ---
+    
+    // Untuk Desktop (Mouse)
+    btnGacha.addEventListener("mousedown", startHold);
+    btnGacha.addEventListener("mouseup", releaseHold);
+    btnGacha.addEventListener("mouseleave", releaseHold); // Jika kursor ditarik keluar dari tombol saat menahan
+
+    // Untuk Layar Sentuh / Mobile (HP/Tablet)
+    btnGacha.addEventListener("touchstart", (e) => {
+        e.preventDefault(); // Mencegah browser scroll/zoom tidak sengaja
+        startHold(e);
+    }, { passive: false });
+    btnGacha.addEventListener("touchend", releaseHold);
+    btnGacha.addEventListener("touchcancel", releaseHold);
 }
