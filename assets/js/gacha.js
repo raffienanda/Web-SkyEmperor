@@ -1,5 +1,5 @@
 // === GANTI DENGAN URL APPS SCRIPT KAMU ===
-const scriptURL = "https://script.google.com/macros/s/AKfycbzJIQcaogeUI1U6vTW9f0AIe_zOEPrhRnSjCJPyEbuGU7Vq5T4ia-oY8kujAyINFyiIiQ/exec"; 
+const scriptURL = "https://script.google.com/macros/s/AKfycbxjt9UpZX3l8_bjHxcXW8p5BEtsKfGwMkjgx6hrsZMvY-KIJxH4_0ykU11GKtorCkwdAA/exec"; 
 
 let animationInterval = null;
 let activeMember = "";
