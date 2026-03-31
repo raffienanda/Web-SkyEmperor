@@ -60,21 +60,23 @@ const kelasInput = document.getElementById("login-kelas");
 
 if (togglePassword && kelasInput) {
     togglePassword.addEventListener("click", function () {
-        // Cek tipe saat ini (password atau text)
+        // Cek tipe saat ini (apakah sedang password/tersembunyi?)
         const isPassword = kelasInput.getAttribute("type") === "password";
         
-        // Ubah tipenya
+        // Jika iya, ubah jadi text. Jika tidak, kembalikan ke password.
         kelasInput.setAttribute("type", isPassword ? "text" : "password");
         
         // Ubah icon mata dan warnanya
         if (isPassword) {
+            // Saat password DIBUKA (menjadi text) -> Icon Mata Terbuka (Biru)
             this.classList.remove("fa-eye-slash");
             this.classList.add("fa-eye");
-            this.style.color = "#0284c7"; // Warna biru saat terlihat
+            this.style.color = "#0284c7"; 
         } else {
+            // Saat password DITUTUP (menjadi password) -> Icon Mata Tercoret (Abu-abu)
             this.classList.remove("fa-eye");
             this.classList.add("fa-eye-slash");
-            this.style.color = "#888"; // Warna abu-abu saat sembunyi
+            this.style.color = "#888"; 
         }
     });
 }

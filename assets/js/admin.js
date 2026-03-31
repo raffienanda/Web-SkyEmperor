@@ -18,6 +18,18 @@ if (userRole === "member" || userRole === "") {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+    // --- TAMBAHAN: Tampilkan Nama & Role di Sidebar Kiri Bawah ---
+    const adminNameDisplay = document.getElementById("display-admin-name");
+    const adminRoleDisplay = document.getElementById("display-admin-role");
+
+    if (adminNameDisplay && adminRoleDisplay && userSession) {
+        // Ambil nama depan saja biar tidak kepanjangan
+        const firstName = userSession.nama.split(" ")[0];
+        adminNameDisplay.textContent = firstName;
+        adminRoleDisplay.textContent = userRole; 
+    }
+    // -----------------------------------------------------------
+
     if (userRole === "operator") {
         const navItems = document.querySelectorAll(".sidebar-nav .nav-item");
         if (navItems.length >= 4) {

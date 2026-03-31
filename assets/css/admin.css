@@ -375,3 +375,61 @@ td {
     color: #94a3b8;
     margin-top: 5px;
 }
+
+/* === PROFIL ADMIN DI SIDEBAR BAWAH === */
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px; /* Samakan dengan padding nav-item */
+    margin-bottom: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05); /* Garis batas tipis atas */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Garis batas tipis bawah */
+    color: white;
+}
+
+.profile-avatar {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: #e2e8f0;
+    flex-shrink: 0; /* Biar avatar tidak gepeng */
+}
+
+.profile-text {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    white-space: nowrap; /* Teks jangan turun ke bawah */
+}
+
+.profile-name {
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: #ffffff;
+}
+
+.profile-role {
+    font-size: 11px;
+    color: #94a3b8; /* Abu-abu terang */
+    text-transform: capitalize; /* Huruf pertama besar */
+    margin-top: 2px;
+}
+
+/* Penyesuaian saat sidebar di-collapse (ditutup/dikecilkan) */
+.sidebar.collapsed .admin-profile {
+    padding: 15px 0;
+    justify-content: center;
+}
+
+.sidebar.collapsed .profile-text {
+    display: none; /* Sembunyikan teks nama & role saat sidebar kecil */
+}
