@@ -61,7 +61,10 @@ async function loadAllData() {
 
         renderMembers(globalMembers);
         renderPrizes(data.prizes || []);
-        renderLogs(globalLogs);
+        
+        populateAdminFilter(globalLogs); // Mengisi list Admin di dropdown
+        applyLogFilters(); // Menjalankan filter pertama kali
+        
         renderDashboard();
     } catch (err) {
         console.error(err);
@@ -309,29 +312,72 @@ document.addEventListener('DOMContentLoaded', () => {
     if (collapseBtn && sidebar) collapseBtn.addEventListener('click', () => sidebar.classList.toggle('collapsed'));
 });
 
-const filterDateInput = document.getElementById("filter-date-logs");
-if (filterDateInput) {
-    filterDateInput.addEventListener("change", (e) => {
-        const selectedDate = e.target.value;
-        if (!selectedDate) return renderLogs(globalLogs);
-
-        const filteredLogs = globalLogs.filter(row => {
-            let dateObj = new Date(row[0]);
-            if (isNaN(dateObj)) return false;
-            let year = dateObj.getFullYear();
-            let month = String(dateObj.getMonth() + 1).padStart(2, '0');
-            let day = String(dateObj.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}` === selectedDate;
-        });
-        renderLogs(filteredLogs);
+// --- LOGIKA FILTER HISTORY ---
+function populateAdminFilter(logs) {
+    const adminSelect = document.getElementById("filter-admin-logs");
+    if (!adminSelect) return;
+    
+    const currentVal = adminSelect.value;
+    const admins = new Set();
+    logs.forEach(log => {
+        if (log[3]) admins.add(log[3]);
     });
+    
+    adminSelect.innerHTML = '<option value="">Semua Admin/Op</option>';
+    admins.forEach(admin => {
+        const option = document.createElement("option");
+        option.value = admin;
+        option.textContent = admin;
+        adminSelect.appendChild(option);
+    });
+    // Pertahankan pilihan admin sebelumnya saat auto-refresh
+    adminSelect.value = currentVal;
 }
 
-function resetFilterDate() {
-    const dateInput = document.getElementById("filter-date-logs");
-    if (dateInput) dateInput.value = "";
-    renderLogs(globalLogs);
+function applyLogFilters() {
+    const dateVal = document.getElementById("filter-date-logs")?.value || "";
+    const adminVal = document.getElementById("filter-admin-logs")?.value.toLowerCase() || "";
+    const searchVal = document.getElementById("search-logs")?.value.toLowerCase() || "";
+    
+    let filteredLogs = globalLogs.filter(row => {
+        let matchDate = true;
+        if (dateVal) {
+            let dateObj = new Date(row[0]);
+            if (!isNaN(dateObj)) {
+                let year = dateObj.getFullYear();
+                let month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                let day = String(dateObj.getDate()).padStart(2, '0');
+                matchDate = (`${year}-${month}-${day}` === dateVal);
+            } else {
+                matchDate = false;
+            }
+        }
+        
+        let adminName = (row[3] || "").toLowerCase();
+        let matchAdmin = adminVal ? adminName.includes(adminVal) : true;
+        
+        let memberName = (row[1] || "").toLowerCase();
+        let prizeName = (row[2] || "").toLowerCase();
+        let matchSearch = searchVal ? (memberName.includes(searchVal) || prizeName.includes(searchVal)) : true;
+        
+        return matchDate && matchAdmin && matchSearch;
+    });
+    
+    renderLogs(filteredLogs);
 }
+
+// Event Listeners untuk Filter
+document.getElementById("filter-date-logs")?.addEventListener("change", applyLogFilters);
+document.getElementById("filter-admin-logs")?.addEventListener("change", applyLogFilters);
+document.getElementById("search-logs")?.addEventListener("keyup", applyLogFilters);
+
+function resetFilterLogs() {
+    if(document.getElementById("filter-date-logs")) document.getElementById("filter-date-logs").value = "";
+    if(document.getElementById("filter-admin-logs")) document.getElementById("filter-admin-logs").value = "";
+    if(document.getElementById("search-logs")) document.getElementById("search-logs").value = "";
+    applyLogFilters();
+}
+// --- AKHIR LOGIKA FILTER HISTORY ---
 
 window.onclick = function (event) {
     const editModal = document.getElementById("edit-modal");
@@ -430,26 +476,79 @@ setInterval(async () => {
 
         globalLogs = data.logs || [];
         
-        const filterDateInput = document.getElementById("filter-date-logs");
-        const selectedDate = filterDateInput ? filterDateInput.value : "";
-
-        if (selectedDate) {
-            const filteredLogs = globalLogs.filter(row => {
-                let dateObj = new Date(row[0]);
-                if (isNaN(dateObj)) return false;
-                let year = dateObj.getFullYear();
-                let month = String(dateObj.getMonth() + 1).padStart(2, '0');
-                let day = String(dateObj.getDate()).padStart(2, '0');
-                return `${year}-${month}-${day}` === selectedDate;
-            });
-            renderLogs(filteredLogs);
-        } else {
-            renderLogs(globalLogs);
-        }
-
+        populateAdminFilter(globalLogs); // Update dropdown admin misal ada admin baru yang masuk data
+        applyLogFilters(); // Render logs dengan filter yang sedang aktif
+        
         renderDashboard();
 
     } catch (err) {
         console.error("Gagal melakukan auto-refresh history:", err);
     }
-}, 1000);
+}, 3000); // Pertimbangkan untuk mengubahnya menjadi 3000 atau 5000 agar web tidak terasa berat
+
+// --- LOGIKA EXPORT EXCEL ---
+function exportToExcel() {
+    // 1. Ambil nilai filter yang sedang aktif saat tombol ditekan
+    const dateVal = document.getElementById("filter-date-logs")?.value || "";
+    const adminVal = document.getElementById("filter-admin-logs")?.value.toLowerCase() || "";
+    const searchVal = document.getElementById("search-logs")?.value.toLowerCase() || "";
+    
+    // 2. Saring data berdasarkan filter yang aktif
+    let dataToExport = globalLogs.filter(row => {
+        let matchDate = true;
+        if (dateVal) {
+            let dateObj = new Date(row[0]);
+            if (!isNaN(dateObj)) {
+                let year = dateObj.getFullYear();
+                let month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                let day = String(dateObj.getDate()).padStart(2, '0');
+                matchDate = (`${year}-${month}-${day}` === dateVal);
+            } else {
+                matchDate = false;
+            }
+        }
+        
+        let adminName = (row[3] || "").toLowerCase();
+        let matchAdmin = adminVal ? adminName.includes(adminVal) : true;
+        
+        let memberName = (row[1] || "").toLowerCase();
+        let prizeName = (row[2] || "").toLowerCase();
+        let matchSearch = searchVal ? (memberName.includes(searchVal) || prizeName.includes(searchVal)) : true;
+        
+        return matchDate && matchAdmin && matchSearch;
+    });
+    
+    // 3. Cek apakah ada data
+    if (dataToExport.length === 0) {
+        alert("Tidak ada data untuk diexport dengan filter saat ini!");
+        return;
+    }
+
+    // 4. Format ulang data agar rapi di Excel (Buang kolom Aksi)
+    const excelData = dataToExport.map(row => {
+        let dateObj = new Date(row[0]);
+        let timeString = isNaN(dateObj) ? row[0] : dateObj.toLocaleString();
+        
+        return {
+            "Waktu": timeString,
+            "Nama Pemenang": row[1] || "-",
+            "Hadiah": row[2] || "-",
+            "Admin / Operator": row[3] || "-"
+        };
+    });
+
+    // 5. Buat file Excel menggunakan SheetJS
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Data Pemenang");
+
+    // 6. Buat nama file dinamis (Contoh: Laporan_Gacha_2023-10-25.xlsx)
+    let filename = "Laporan_Gacha";
+    if (dateVal) filename += "_" + dateVal;
+    if (adminVal) filename += "_" + adminVal;
+    filename += ".xlsx";
+
+    // 7. Unduh file
+    XLSX.writeFile(workbook, filename);
+}
+// --- AKHIR LOGIKA EXPORT EXCEL ---

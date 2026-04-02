@@ -137,6 +137,23 @@
                 <div id="tab-logs" class="tab-content">
                     <div class="page-header">
                         <h2>History Pemenang</h2>
+                        <div class="header-actions">
+                            <input type="date" id="filter-date-logs" class="admin-input" title="Filter Tanggal">
+                            
+                            <select id="filter-admin-logs" class="admin-input">
+                                <option value="">Semua Admin/Op</option>
+                            </select>
+                            
+                            <div class="search-box">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="search-logs" placeholder="Cari Pemenang/Hadiah...">
+                            </div>
+                            
+                            <button class="btn-tambah-outline" onclick="resetFilterLogs()"><i class="fa-solid fa-rotate-right"></i> Reset</button>
+                            <button class="btn-tambah-outline" onclick="exportToExcel()" style="background-color: #10b981; color: white; border-color: #059669;">
+                                <i class="fa-solid fa-file-excel"></i> Export XLSX
+                            </button>
+                        </div>
                     </div>
                     <div class="table-container">
                         <table id="table-logs">
@@ -232,6 +249,7 @@
     </div>
 
     <script src="assets/js/admin.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </body>
 
 </html>
