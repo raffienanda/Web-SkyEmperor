@@ -442,3 +442,43 @@ function openFullscreenGacha() {
         elem.msRequestFullscreen();
     }
 }
+
+// ==========================================
+// FITUR AUTO-REFRESH HISTORY (LOGS)
+// ==========================================
+setInterval(async () => {
+    try {
+        // Ambil data terbaru dari server secara senyap (tanpa loading screen)
+        const res = await fetch(scriptURL + "?action=getAllData");
+        const data = await res.json();
+
+        // Perbarui variabel global dengan data terbaru
+        globalLogs = data.logs || [];
+        
+        // Cek apakah admin sedang menggunakan filter tanggal
+        const filterDateInput = document.getElementById("filter-date-logs");
+        const selectedDate = filterDateInput ? filterDateInput.value : "";
+
+        if (selectedDate) {
+            // Jika sedang ada filter tanggal, terapkan filter pada data terbaru
+            const filteredLogs = globalLogs.filter(row => {
+                let dateObj = new Date(row[0]);
+                if (isNaN(dateObj)) return false;
+                let year = dateObj.getFullYear();
+                let month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                let day = String(dateObj.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}` === selectedDate;
+            });
+            renderLogs(filteredLogs);
+        } else {
+            // Jika tidak ada filter, tampilkan semua history terbaru
+            renderLogs(globalLogs);
+        }
+
+        // Opsional: Perbarui sekalian persentase di Dashboard agar tetap akurat
+        renderDashboard();
+
+    } catch (err) {
+        console.error("Gagal melakukan auto-refresh history:", err);
+    }
+}, 1000); // 5000 milidetik = Refresh setiap 5 detik
