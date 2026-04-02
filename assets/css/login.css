@@ -1,15 +1,14 @@
 main.login-page {
-  display: flex !important; /* Paksa ubah display dari style.css */
+  display: flex !important; 
   justify-content: center !important;
   align-items: center !important;
   padding: 0 !important;
-  min-height: calc(100vh - 80px); /* Tinggi layar dikurangi tinggi header */
+  min-height: calc(100vh - 80px); 
 }
 
-/* Kotak Login (Container) */
 .login-box {
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px); /* Efek blur kaca */
+  backdrop-filter: blur(15px); 
   border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 40px 50px;
   border-radius: 20px;
@@ -20,10 +19,9 @@ main.login-page {
   flex-direction: column;
   gap: 20px;
   width: 100%;
-  max-width: 400px; /* Batas lebar kotak agar rapi */
+  max-width: 400px; 
 }
 
-/* Tipografi di dalam kotak */
 .login-box h1 {
   font-size: 36px;
   margin: 0;
@@ -36,7 +34,6 @@ main.login-page {
   margin: 5px 0 20px 0;
 }
 
-/* Input Styles */
 .input-group {
   display: flex;
   flex-direction: column;
@@ -53,7 +50,7 @@ main.login-page {
   font-family: 'Inter', sans-serif;
   background: rgba(255, 255, 255, 0.9);
   color: #333;
-  box-sizing: border-box; /* Pastikan padding tidak melebarkan input */
+  box-sizing: border-box; 
   outline: none;
   transition: box-shadow 0.2s;
 }
@@ -62,7 +59,6 @@ main.login-page {
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
 }
 
-/* Button Styles */
 .login-btn {
   width: 100%;
   padding: 14px;
@@ -71,7 +67,7 @@ main.login-page {
   border: none;
   border-radius: 12px;
   background: white;
-  color: #243e81; /* Sesuai tema biru */
+  color: #243e81; 
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   margin-top: 10px;

@@ -18,17 +18,14 @@ if (userRole === "member" || userRole === "") {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    // --- TAMBAHAN: Tampilkan Nama & Role di Sidebar Kiri Bawah ---
     const adminNameDisplay = document.getElementById("display-admin-name");
     const adminRoleDisplay = document.getElementById("display-admin-role");
 
     if (adminNameDisplay && adminRoleDisplay && userSession) {
-        // Ambil nama depan saja biar tidak kepanjangan
         const firstName = userSession.nama.split(" ")[0];
         adminNameDisplay.textContent = firstName;
         adminRoleDisplay.textContent = userRole;
     }
-    // -----------------------------------------------------------
 
     if (userRole === "operator") {
         const navItems = document.querySelectorAll(".sidebar-nav .nav-item");
@@ -71,7 +68,6 @@ async function loadAllData() {
     }
 }
 
-// --- RENDER MEMBERS (Tanpa Count) ---
 function renderMembers(data) {
     const tbody = document.querySelector("#table-members tbody");
     tbody.innerHTML = "";
@@ -111,27 +107,21 @@ function renderPrizes(data) {
     });
 }
 
-// --- RENDER LOGS (Waktu, Nama, Hadiah) ---
 function renderLogs(data) {
     const tbody = document.querySelector("#table-logs tbody");
     tbody.innerHTML = "";
     
-    // Membalik urutan agar log terbaru muncul di paling atas
     const reversed = data.slice().reverse();
     const printedLogs = getPrintedLogs();
 
     reversed.forEach(row => {
-        // Kolom A (index 0): Waktu
         let dateObj = new Date(row[0]);
         let timeString = isNaN(dateObj) ? row[0] : dateObj.toLocaleString();
 
-        // Kolom B (index 1): Nama Member
         let safeName = row[1] ? row[1].toString().replace(/'/g, "\\'") : "-";
 
-        // Kolom C (index 2): Prize (Hadiah)
         let safePrize = row[2] ? row[2].toString().replace(/'/g, "\\'") : "-"; 
 
-        // Kolom D (index 3): Admin/Operator yang memberi jatah
         let adminGiver = row[3] ? row[3] : "-"; 
 
         let safeTime = timeString.replace(/'/g, "\\'");
@@ -161,7 +151,6 @@ function renderLogs(data) {
     });
 }
 
-// --- FUNGSI ADMIN ---
 async function addMember() {
     const nama = document.getElementById("new-member-name").value;
     const kelas = document.getElementById("new-member-class").value;
@@ -359,7 +348,7 @@ function renderDashboard() {
         const totalGacha = globalLogs.length;
         const prizeCounts = {};
         globalLogs.forEach(log => {
-            const prize = log[2]; // Index 2 sekarang adalah prize
+            const prize = log[2]; 
             if (prize) prizeCounts[prize] = (prizeCounts[prize] || 0) + 1;
         });
 
@@ -379,18 +368,13 @@ function renderDashboard() {
     }
 }
 
-// ==========================================
-// PENGIRIM DATA GACHA KE SERVER (BEDA DEVICE)
-// ==========================================
 const btnSetGacha = document.getElementById("admin-btn-setgacha");
 
-// Di dalam assets/js/admin.js
 if (btnSetGacha) {
     btnSetGacha.addEventListener("click", async () => {
         const nama = document.getElementById("admin-gacha-nama").value.trim();
         const paket = document.getElementById("admin-gacha-billing").value;
 
-        // AMBIL NAMA ADMIN DARI SESSION LOGIN
         const adminName = userSession ? userSession.nama : "Unknown Admin";
 
         if (!nama || !paket) return alert("Isi Nama dan pilih Paket Billing!");
@@ -403,7 +387,7 @@ if (btnSetGacha) {
             fd.append("action", "setSession");
             fd.append("nama", nama);
             fd.append("spins", paket);
-            fd.append("admin", adminName); // TAMBAHKAN INI: Mengirim nama admin ke spreadsheet
+            fd.append("admin", adminName); 
 
             await fetch(scriptURL, { method: "POST", body: fd });
 
@@ -427,40 +411,29 @@ function openFullscreenGacha() {
     else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
 }
 
-// ==========================================
-// FUNGSI FULL SCREEN IFRAME GACHA
-// ==========================================
 function openFullscreenGacha() {
     const elem = document.getElementById("iframe-gacha");
 
-    // Pengecekan agar support di berbagai jenis browser
     if (elem.requestFullscreen) {
         elem.requestFullscreen();
-    } else if (elem.webkitRequestFullscreen) { /* Safari */
+    } else if (elem.webkitRequestFullscreen) { 
         elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) { /* IE11 */
+    } else if (elem.msRequestFullscreen) { 
         elem.msRequestFullscreen();
     }
 }
 
-// ==========================================
-// FITUR AUTO-REFRESH HISTORY (LOGS)
-// ==========================================
 setInterval(async () => {
     try {
-        // Ambil data terbaru dari server secara senyap (tanpa loading screen)
         const res = await fetch(scriptURL + "?action=getAllData");
         const data = await res.json();
 
-        // Perbarui variabel global dengan data terbaru
         globalLogs = data.logs || [];
         
-        // Cek apakah admin sedang menggunakan filter tanggal
         const filterDateInput = document.getElementById("filter-date-logs");
         const selectedDate = filterDateInput ? filterDateInput.value : "";
 
         if (selectedDate) {
-            // Jika sedang ada filter tanggal, terapkan filter pada data terbaru
             const filteredLogs = globalLogs.filter(row => {
                 let dateObj = new Date(row[0]);
                 if (isNaN(dateObj)) return false;
@@ -471,14 +444,12 @@ setInterval(async () => {
             });
             renderLogs(filteredLogs);
         } else {
-            // Jika tidak ada filter, tampilkan semua history terbaru
             renderLogs(globalLogs);
         }
 
-        // Opsional: Perbarui sekalian persentase di Dashboard agar tetap akurat
         renderDashboard();
 
     } catch (err) {
         console.error("Gagal melakukan auto-refresh history:", err);
     }
-}, 1000); // 5000 milidetik = Refresh setiap 5 detik
+}, 1000);

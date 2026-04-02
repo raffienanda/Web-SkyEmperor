@@ -1,11 +1,10 @@
-/* Mengesampingkan style.css khusus untuk Admin */
 body.admin-body {
     margin: 0;
     padding: 0;
-    background: #ffffff; /* Warna putih utama */
+    background: #ffffff;
     color: #333;
     height: 100vh;
-    overflow: hidden; /* Mencegah scroll full page */
+    overflow: hidden; 
 }
 
 .admin-layout {
@@ -13,10 +12,9 @@ body.admin-body {
     height: 100vh;
 }
 
-/* === SIDEBAR KIRI === */
 .sidebar {
     width: 250px;
-    background-color: #3b4e6b; /* Warna biru slate sesuai gambar */
+    background-color: #3b4e6b;
     color: white;
     display: flex;
     flex-direction: column;
@@ -32,7 +30,6 @@ body.admin-body {
 
 .sidebar-logo {
     height: 35px;
-    /* Efek untuk membuat logo berwarna putih penuh (opsional) */
     filter: brightness(0) invert(1); 
 }
 
@@ -74,17 +71,15 @@ body.admin-body {
     background-color: rgba(255,255,255,0.05);
 }
 
-/* Tambahan garis putih di kiri saat active (opsional, tapi bagus) */
 .nav-item.active {
     border-left: 4px solid white;
-    padding-left: 26px; /* Kompensasi border */
+    padding-left: 26px;
 }
 
 .sidebar-footer {
     padding-bottom: 30px;
 }
 
-/* === KONTEN KANAN === */
 .main-content {
     flex-grow: 1;
     display: flex;
@@ -99,12 +94,12 @@ body.admin-body {
 
 .top-header {
     height: 60px;
-    border-bottom: 2px solid #eaeaea; /* Garis abu-abu di atas */
+    border-bottom: 2px solid #eaeaea; 
 }
 
 .content-wrapper {
     padding: 30px 40px;
-    overflow-y: auto; /* Scroll hanya di area konten */
+    overflow-y: auto; 
     flex-grow: 1;
 
     width: 100%;
@@ -125,13 +120,13 @@ body.admin-body {
     to { opacity: 1; }
 }
 
-/* Header Halaman & Search */
+
 .page-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
-    border-bottom: 2px solid #333; /* Garis hitam tebal di bawah tulisan Member */
+    border-bottom: 2px solid #333; 
     padding-bottom: 10px;
 }
 
@@ -152,7 +147,7 @@ body.admin-body {
     display: flex;
     align-items: center;
     border: 1px solid #ccc;
-    border-radius: 20px; /* Bentuk pill/kapsul */
+    border-radius: 20px; 
     padding: 5px 15px;
     background: white;
 }
@@ -171,7 +166,6 @@ body.admin-body {
     width: 200px;
 }
 
-/* Tombol + Tambah Outline */
 .btn-tambah-outline {
     background: white;
     color: #000;
@@ -189,7 +183,6 @@ body.admin-body {
     background: #f0f0f0;
 }
 
-/* === TABEL === */
 .table-container {
     width: 100%;
 }
@@ -200,7 +193,7 @@ table {
 }
 
 th {
-    background-color: #e6e6e6; /* Abu-abu muda */
+    background-color: #e6e6e6; 
     color: #666;
     text-align: left;
     padding: 12px 15px;
@@ -215,7 +208,6 @@ td {
     color: #666;
 }
 
-/* Tombol Aksi Kapsul (Pill) */
 .btn-action-pill {
     padding: 4px 12px;
     border-radius: 12px;
@@ -238,7 +230,6 @@ td {
     border-color: #fbbf24;
 }
 
-/* Input General Admin */
 .admin-input {
     padding: 10px;
     border: 1px solid #ccc;
@@ -246,7 +237,6 @@ td {
     font-family: 'Inter', sans-serif;
 }
 
-/* === MODAL === */
 .modal {
     display: none;
     position: fixed;
@@ -299,43 +289,35 @@ td {
     font-weight: bold;
 }
 
-/* === EFEK COLLAPSE SIDEBAR === */
-/* Tambahkan transisi agar animasi mengecilnya mulus */
 .sidebar {
     transition: width 0.3s ease;
-    overflow-x: hidden; /* Cegah teks tumpah saat proses mengecil */
+    overflow-x: hidden; 
 }
 
-/* Ukuran sidebar saat dilipat */
 .sidebar.collapsed {
     width: 70px;
 }
 
-/* Sembunyikan logo saat dilipat */
 .sidebar.collapsed .sidebar-logo {
     display: none;
 }
 
-/* Tengahkan posisi tombol lipat */
 .sidebar.collapsed .sidebar-header {
     justify-content: center;
     padding: 20px 0;
 }
 
-/* Format ulang tombol menu agar cuma muncul icon */
 .sidebar.collapsed .nav-item {
-    font-size: 0; /* Sembunyikan teks "Member", "Prize", dll */
+    font-size: 0; 
     justify-content: center;
     padding: 15px 0;
-    gap: 0; /* Hilangkan jarak antara teks dan icon */
+    gap: 0; 
 }
 
-/* Pertahankan ukuran icon agar tidak ikut mengecil */
 .sidebar.collapsed .nav-item i {
     font-size: 18px;
 }
 
-/* === DASHBOARD STATS === */
 .dashboard-stats {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -376,15 +358,14 @@ td {
     margin-top: 5px;
 }
 
-/* === PROFIL ADMIN DI SIDEBAR BAWAH === */
 .admin-profile {
     display: flex;
     align-items: center;
     gap: 15px;
-    padding: 15px 20px; /* Samakan dengan padding nav-item */
+    padding: 15px 20px; 
     margin-bottom: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05); /* Garis batas tipis atas */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Garis batas tipis bawah */
+    border-top: 1px solid rgba(255, 255, 255, 0.05); 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
     color: white;
 }
 
@@ -398,14 +379,14 @@ td {
     align-items: center;
     font-size: 14px;
     color: #e2e8f0;
-    flex-shrink: 0; /* Biar avatar tidak gepeng */
+    flex-shrink: 0; 
 }
 
 .profile-text {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    white-space: nowrap; /* Teks jangan turun ke bawah */
+    white-space: nowrap; 
 }
 
 .profile-name {
@@ -419,17 +400,16 @@ td {
 
 .profile-role {
     font-size: 11px;
-    color: #94a3b8; /* Abu-abu terang */
-    text-transform: capitalize; /* Huruf pertama besar */
+    color: #94a3b8; 
+    text-transform: capitalize; 
     margin-top: 2px;
 }
 
-/* Penyesuaian saat sidebar di-collapse (ditutup/dikecilkan) */
 .sidebar.collapsed .admin-profile {
     padding: 15px 0;
     justify-content: center;
 }
 
 .sidebar.collapsed .profile-text {
-    display: none; /* Sembunyikan teks nama & role saat sidebar kecil */
+    display: none; 
 }
