@@ -171,7 +171,7 @@ main {
   text-align: left;
   flex: 1;
   min-width: 300px;
-  max-width: 400px;
+  max-width: 600px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }

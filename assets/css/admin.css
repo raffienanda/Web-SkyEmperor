@@ -413,3 +413,8 @@ td {
 .sidebar.collapsed .profile-text {
     display: none; 
 }
+
+#admin-gacha-nama, #admin-gacha-billing {
+    padding: 15px;      
+    font-size: 16px;    
+}
